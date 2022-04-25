@@ -2,6 +2,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
+import javax.swing.*;
+import java.io.*;
+import java.net.*;
+import static javax.swing.JOptionPane.YES_OPTION;
 
 /**
  * Project 4 - Main Menu
@@ -15,6 +19,11 @@ import java.util.Random;
 
 public class MainMenu {
 
+    private static String [] mainOptions = {"1", "2", "3"};
+    private static String [] teacherOptions = {"1","2", "3"};
+    private static String [] teacherAccounts = {"1", "2"};
+    private static String [] quizOptions = {"1", "2", "3", "4", "5"};
+
     public static void main(String[] args) {
 
         try {
@@ -22,7 +31,8 @@ public class MainMenu {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("An error occurred loading data!");
+            JOptionPane.showMessageDialog(null, "Error loading the Data!.", "Goodbye",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -37,15 +47,14 @@ public class MainMenu {
         int studentCourseChoice;    // student's choice for course
         int quizMenuChoiceStudent;   // student's choice for quizzes (list or view attempts)
 
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Learning Management System");
+        JOptionPane.showMessageDialog(null, "Learning Management System", "Welcome",
+                JOptionPane.INFORMATION_MESSAGE);
 
         do {
-            System.out.println("Main Menu: \n1) Log In \n2) Sign Up \n3) Exit");
-
-            mainOption = scanner.nextInt();
-            scanner.nextLine();
+            mainOption = (int) JOptionPane.showInputDialog(null,
+                    "Main Menu: \n1) Log In \n2) Sign Up \n3) Exit",
+                    "Menu", JOptionPane.QUESTION_MESSAGE,
+                    null, mainOptions, mainOptions[0]);
 
             if (mainOption == 1) {
 
@@ -55,20 +64,22 @@ public class MainMenu {
 
                 do {
 
-                    System.out.println("Enter Username: ");
-                    username = scanner.nextLine();
+                    username = JOptionPane.showInputDialog(null, "Enter Username: ",
+                            "Account", JOptionPane.QUESTION_MESSAGE);
 
-                    System.out.println("Enter Password: ");
-                    password = scanner.nextLine();
+                    password = JOptionPane.showInputDialog(null, "Enter Password: ",
+                            "Account", JOptionPane.QUESTION_MESSAGE);
 
                     if (Account.isValidCredential(username, password)) {
 
                         thisAccount = new Account(username, password);
-                        System.out.println("Login Successful!\n");
+                        JOptionPane.showMessageDialog(null, "Login Succesful!", "Log in",
+                                JOptionPane.INFORMATION_MESSAGE);
 
                     } else {
 
-                        System.out.println("Invalid Credentials! \nTry Again!");
+                        JOptionPane.showMessageDialog(null, "Invalid Credentials! /n Try Again", "Goodbye",
+                                JOptionPane.ERROR_MESSAGE);
 
                     }
 
@@ -78,32 +89,36 @@ public class MainMenu {
 
                     do {
 
-                        System.out.println("Teacher's Menu\n1) Account Settings\n2) Quizzes\n3) Exit");
-                        teacherOption = scanner.nextInt();
-                        scanner.nextLine();
+                        teacherOption = (int) JOptionPane.showInputDialog(null,
+                                "Teacher's Menu \n1) Account Settings \n2) Quizzes \n3) Exit",
+                                "Menu", JOptionPane.QUESTION_MESSAGE,
+                                null, teacherOptions, teacherOptions[0]);
 
                         if (teacherOption == 1) {
 
                             System.out.println("Teacher Account Menu \n1) Edit Account \n2) Delete Account");
-                            teacherAccount = scanner.nextInt();
-                            scanner.nextLine();
+                            teacherAccount = (int) JOptionPane.showInputDialog(null,
+                                    "Teacher's Account Menu \n1) Edit Account \n2) Delete Account",
+                                    "Menu", JOptionPane.QUESTION_MESSAGE,
+                                    null, teacherAccounts, teacherAccounts[0]);
 
                             switch (teacherAccount) {
 
                                 case 1 -> {
 
                                     System.out.println("1) Update Username \n2) Update Password \n3) Update Name");
-                                    int choice = scanner.nextInt();     // user's choice
-                                    scanner.nextLine();
+                                    int choice = (int) JOptionPane.showInputDialog(null,
+                                            "1) Update Username \n2) Update Password \n3) Update Name",
+                                            "Menu", JOptionPane.QUESTION_MESSAGE,
+                                            null, teacherOptions, teacherOptions[0]);    // user's choice
                                     thisAccount.updateAccount(scanner, choice);
 
                                 }   // update account
 
                                 case 2 -> {
 
-                                    System.out.println("Enter 1 to confirm, anything else to cancel!");
-                                    int choice = scanner.nextInt();
-                                    scanner.nextLine();
+                                    int choice = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter 1 to confirm, anything else to cancel!",
+                                            "Teacher", JOptionPane.QUESTION_MESSAGE));
 
                                     if (choice == 1) {
 
@@ -119,8 +134,8 @@ public class MainMenu {
 
                         } else if (teacherOption == 2) {
 
-                            System.out.println("Please Enter Quiz Filename: ");
-                            String quizFile = scanner.nextLine();
+                            String quizFile = JOptionPane.showInputDialog(null, "Please Enter Quiz Filename: ",
+                                    "Quiz", JOptionPane.QUESTION_MESSAGE);
 
                             Quiz quizzes;
 
@@ -128,17 +143,19 @@ public class MainMenu {
                                 quizzes = new Quiz(quizFile);
                                 Course.initializeCourses();
                             } catch (IOException e) {
-                                System.out.println("Error Reading Quiz File!");
+                                JOptionPane.showMessageDialog(null, "Error Reading Quiz File!", "Goodbye",
+                                        JOptionPane.ERROR_MESSAGE);
                                 break;
                             }
 
                             do {
 
-                                System.out.println("Teacher's Quiz Menu");
-                                System.out.println("1) Select Course \n2) Add Course \n3) Exit");
-
-                                teacherQuizChoice = scanner.nextInt();
-                                scanner.nextLine();
+                                JOptionPane.showMessageDialog(null, "Teacher's Quiz Menu", "Teacher",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                teacherQuizChoice = (int) JOptionPane.showInputDialog(null,
+                                        "1) Select Course \n2) Add Course \n3) Exit",
+                                        "Menu", JOptionPane.QUESTION_MESSAGE,
+                                        null, teacherOptions, teacherOptions[0]);
 
                                 switch (teacherQuizChoice) {
 
@@ -146,19 +163,18 @@ public class MainMenu {
 
                                         Course.listCourses();
 
-                                        System.out.println("Enter Course Number: ");
-                                        int courseChoice = scanner.nextInt();
-                                        scanner.nextLine();
+                                        int courseChoice = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Course Number: ",
+                                                "Teacher", JOptionPane.QUESTION_MESSAGE));
 
                                         String courseName = Course.allCourses.get(courseChoice - 1);
 
                                         Course thisCourse = new Course(courseName);
 
-                                        System.out.println("1) List Course Details\n2) Add Quiz File" +
-                                                "\n3) Add Question\n4) Edit Quiz\n5) Remove Quiz");
-
-                                        quizMenuChoiceTeacher = scanner.nextInt();
-                                        scanner.nextLine();
+                                        quizMenuChoiceTeacher = (int) JOptionPane.showInputDialog(null,
+                                                "1) List Course Details \n2) Add Quiz File \n3) Add Question \n4) Edit Quiz\n" +
+                                                        "5) Remove Quiz",
+                                                "Menu", JOptionPane.QUESTION_MESSAGE,
+                                                null, quizOptions, quizOptions[0]);
 
                                         switch (quizMenuChoiceTeacher) {
 
@@ -166,15 +182,15 @@ public class MainMenu {
 
                                             case 2 -> {
 
-                                                System.out.println("How many Questions are in the File?");
-                                                int added = scanner.nextInt();
-                                                scanner.nextLine();
+                                                int added = Integer.parseInt(JOptionPane.showInputDialog(null, "How many Questions are in the File?",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
-                                                System.out.println("Enter Filename:");
-                                                String filename = scanner.nextLine();
+                                                String filename = (JOptionPane.showInputDialog(null, "Enter Filename:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
                                                 Quiz.updateQuizFile(filename, thisCourse, added);
-                                                System.out.println("Quiz Successfully Added!");
+                                                JOptionPane.showMessageDialog(null, "Quiz Successfully Added!", "Welcome",
+                                                        JOptionPane.INFORMATION_MESSAGE);
 
                                                 thisCourse.updateCourseFile();
 
@@ -185,8 +201,8 @@ public class MainMenu {
                                                 String quizType;
 
                                                 do {
-                                                    System.out.println("Enter Quiz Type [MCQ / TF]");
-                                                    quizType = scanner.nextLine();
+                                                    quizType = (JOptionPane.showInputDialog(null, "Enter Quiz Type [MCQ / TF]",
+                                                            "Quiz", JOptionPane.QUESTION_MESSAGE));
 
                                                     if ((quizType.equals("MCQ")) || (quizType.equals("TF"))) {
 
@@ -194,36 +210,35 @@ public class MainMenu {
 
                                                     } else {
 
-                                                        System.out.println("Invalid Choice!\n" +
-                                                                "Choices are case sensitive!");
+                                                        JOptionPane.showMessageDialog(null, "Invalid Choice!\n" + "Choice are case sensitive!", "Goodbye",
+                                                                JOptionPane.ERROR_MESSAGE);
 
                                                     }
 
                                                 } while(true);  // Get quiz type
 
+                                                String quizName = (JOptionPane.showInputDialog(null, "Enter Name for Quiz:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
-                                                System.out.println("Enter Name for Quiz:");
-                                                String quizName = scanner.nextLine();
+                                                String question = (JOptionPane.showInputDialog(null, "Enter Question:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
-                                                System.out.println("Enter Question:");
-                                                String question = scanner.nextLine();
-
-                                                System.out.println("Enter Correct Answer:");
-                                                String correctAns = scanner.nextLine();
+                                                String correctAns = (JOptionPane.showInputDialog(null, "Enter Correct Answer:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
 
                                                 if (quizType.equals("MCQ")) {
 
-                                                    System.out.println("Enter Number of Choices:");
-                                                    int numQues = scanner.nextInt();
-                                                    scanner.nextLine();
+                                                    int numQues = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Number of Choices: ",
+                                                            "Teacher", JOptionPane.QUESTION_MESSAGE));
 
                                                     ArrayList<String> choices = new ArrayList<>();
 
                                                     for (int i = 0; i < numQues; i++) {
 
-                                                        System.out.printf("Enter Option %d", i + 1);
-                                                        choices.add(scanner.nextLine());
+                                                        String message = JOptionPane.showInputDialog(null, "Enter Option "+ (i + 1), "Welcome", JOptionPane.QUESTION_MESSAGE);
+
+                                                        choices.add(message);
 
                                                     }
 
@@ -231,7 +246,8 @@ public class MainMenu {
                                                     if (quizzes.addQuiz(courseName, quizType, quizName, question,
                                                             choices, correctAns)) {
 
-                                                        System.out.println("Successfully Added!");
+                                                        JOptionPane.showMessageDialog(null, "Successfully Added!", "Welcome",
+                                                                JOptionPane.INFORMATION_MESSAGE);
                                                         Course.totalQuizzes.set(thisCourse.courseNumber,
                                                                 thisCourse.numQuizzes += 1);
 
@@ -239,7 +255,8 @@ public class MainMenu {
 
                                                     } else {
 
-                                                        System.out.println("Error Adding Quiz!");
+                                                        JOptionPane.showMessageDialog(null, "Error Adding Quiz!", "Goodbye",
+                                                                JOptionPane.ERROR_MESSAGE);
 
                                                     }
 
@@ -248,7 +265,8 @@ public class MainMenu {
                                                     if (quizzes.addQuiz(courseName, quizType, quizName, question,
                                                             correctAns)) {
 
-                                                        System.out.println("Successfully Added!");
+                                                        JOptionPane.showMessageDialog(null, "Successfully Added!", "Welcome",
+                                                                JOptionPane.INFORMATION_MESSAGE);
                                                         Course.totalQuizzes.set(thisCourse.courseNumber,
                                                                 thisCourse.numQuizzes += 1);
 
@@ -256,7 +274,9 @@ public class MainMenu {
 
                                                     } else {
 
-                                                        System.out.println("Error Adding Quiz!");
+                                                        JOptionPane.showMessageDialog(null, "Error Adding Quiz!", "Goodbye",
+                                                                JOptionPane.ERROR_MESSAGE);
+
 
                                                     }
 
@@ -270,8 +290,8 @@ public class MainMenu {
                                                 String quizType;
 
                                                 do {
-                                                    System.out.println("Enter Quiz Type [MCQ / TF]");
-                                                    quizType = scanner.nextLine();
+                                                    quizType = (JOptionPane.showInputDialog(null, "Enter Quiz Type [MCQ / TF]",
+                                                            "Quiz", JOptionPane.QUESTION_MESSAGE));
 
                                                     if ((quizType.equals("MCQ")) || (quizType.equals("TF"))) {
 
@@ -279,36 +299,35 @@ public class MainMenu {
 
                                                     } else {
 
-                                                        System.out.println("Invalid Choice!\n" +
-                                                                "Choices are case sensitive!");
+                                                        JOptionPane.showMessageDialog(null, "Invalid Choice!\n" + "Choice are case sensitive!", "Goodbye",
+                                                                JOptionPane.ERROR_MESSAGE);
 
                                                     }
 
                                                 } while(true);  // Get quiz type
 
+                                                String quizName = (JOptionPane.showInputDialog(null, "Enter Name for Quiz:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
-                                                System.out.println("Enter The Quiz's Name:");
-                                                String quizName = scanner.nextLine();
+                                                String question = (JOptionPane.showInputDialog(null, "Enter Question:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
-                                                System.out.println("Enter Question:");
-                                                String question = scanner.nextLine();
-
-                                                System.out.println("Enter Correct Answer:");
-                                                String correctAns = scanner.nextLine();
+                                                String correctAns = (JOptionPane.showInputDialog(null, "Enter Correct Answer:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
 
                                                 if (quizType.equals("MCQ")) {
 
-                                                    System.out.println("Enter Number of Choices to Add:");
-                                                    int numChoice = scanner.nextInt();
-                                                    scanner.nextLine();
+                                                    int numChoice = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Number of Choices to Add: ",
+                                                            "Teacher", JOptionPane.QUESTION_MESSAGE));
 
                                                     ArrayList<String> choices = new ArrayList<>();
 
                                                     for (int i = 0; i < numChoice; i++) {
 
-                                                        System.out.printf("Enter Option %d", i + 1);
-                                                        choices.add(scanner.nextLine());
+                                                        String message = JOptionPane.showInputDialog(null, "Enter Option "+ (i + 1), "Welcome", JOptionPane.QUESTION_MESSAGE);
+
+                                                        choices.add(message);
 
                                                     }
 
@@ -316,9 +335,9 @@ public class MainMenu {
                                                     if (quizzes.editQuiz(courseName, quizType, quizName, question,
                                                             choices, correctAns)) {
 
-                                                        System.out.println("Successfully Added!");
-                                                        Course.totalQuizzes.set(thisCourse.courseNumber,
-                                                                thisCourse.numQuizzes += 1);
+                                                        JOptionPane.showMessageDialog(null, "Successfully Added!", "Welcome",
+                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                        Course.totalQuizzes.set(thisCourse.courseNumber, thisCourse.numQuizzes += 1);
 
                                                         thisCourse.updateCourseFile();
 
@@ -326,7 +345,8 @@ public class MainMenu {
 
                                                     } else {
 
-                                                        System.out.println("Error Adding Quiz!");
+                                                        JOptionPane.showMessageDialog(null, "Error Adding Quiz!", "Goodbye",
+                                                                JOptionPane.ERROR_MESSAGE);
 
                                                     }
 
@@ -335,15 +355,15 @@ public class MainMenu {
                                                     if (quizzes.editQuiz(courseName, quizType, quizName, question,
                                                             correctAns)) {
 
-                                                        System.out.println("Successfully Added!");
-                                                        Course.totalQuizzes.set(thisCourse.courseNumber,
-                                                                thisCourse.numQuizzes += 1);
+                                                        JOptionPane.showMessageDialog(null, "Successfully Added!", "Welcome",
+                                                                JOptionPane.INFORMATION_MESSAGE);
 
                                                         thisCourse.updateCourseFile();
 
                                                     } else {
 
-                                                        System.out.println("Error Adding Quiz!");
+                                                        JOptionPane.showMessageDialog(null, "Error Adding Quiz!", "Goodbye",
+                                                                JOptionPane.ERROR_MESSAGE);
 
                                                     }
 
@@ -353,8 +373,8 @@ public class MainMenu {
 
                                             case 5 -> {
 
-                                                System.out.println("Enter the Name of Quiz to Remove:");
-                                                String quizName = scanner.nextLine();
+                                                String quizName = (JOptionPane.showInputDialog(null, "Enter Name for Quiz:",
+                                                        "Quiz", JOptionPane.QUESTION_MESSAGE));
 
                                                 quizzes.deleteQuiz(quizName);
                                                 Course.totalQuizzes.set(thisCourse.courseNumber,
@@ -364,7 +384,8 @@ public class MainMenu {
 
                                             }       // Removes a specific quiz
 
-                                            default -> System.out.println("Invalid Choice!");
+                                            default -> JOptionPane.showMessageDialog(null, "Invalid Choice!", "Goodbye",
+                                                    JOptionPane.ERROR_MESSAGE);
 
                                         }
 
@@ -376,13 +397,15 @@ public class MainMenu {
                                         Course addedCourse = new Course(scanner);
 
                                         addedCourse.updateCourseFile();
-                                        System.out.println("Course Added Successfully");
+                                        JOptionPane.showMessageDialog(null, "Course Added Successfully", "Welcome",
+                                                JOptionPane.INFORMATION_MESSAGE);
 
                                     }
 
                                     case 3 -> {}        // do nothing if user exits
 
-                                    default -> System.out.println("Invalid Choice!");
+                                    default -> JOptionPane.showMessageDialog(null, "Invalid Choice!", "Goodbye",
+                                            JOptionPane.ERROR_MESSAGE);
 
                                 }
 
@@ -390,7 +413,8 @@ public class MainMenu {
 
                         } else if (teacherOption != 3) {
 
-                            System.out.println("Invalid Option!");
+                            JOptionPane.showMessageDialog(null, "Invalid Choice!", "Goodbye",
+                                    JOptionPane.ERROR_MESSAGE);
 
                         }
 
@@ -400,32 +424,35 @@ public class MainMenu {
 
                     do {
 
-                        System.out.println("Student's Menu \n1) Account Settings \n2) Quizzes \n3) Exit");
-                        studentOption = scanner.nextInt();
-                        scanner.nextLine();
+                        studentOption = (int) JOptionPane.showInputDialog(null,
+                                " Student's Menu \n1) Account Settings \n2) Quizzes \n3) Exit",
+                                "Menu", JOptionPane.QUESTION_MESSAGE,
+                                null, teacherOptions, teacherOptions[0]);
 
                         if (studentOption == 1) {
 
-                            System.out.println("Student Account Menu \n1) Edit Account \n2) Delete Account");
-                            studentAccount = scanner.nextInt();
-                            scanner.nextLine();
+                            studentAccount = (int) JOptionPane.showInputDialog(null,
+                                    "Student Account Menu \n1) Edit Account \n2) Delete Account",
+                                    "Menu", JOptionPane.QUESTION_MESSAGE,
+                                    null, teacherAccounts, teacherAccounts[0]);
 
                             switch (studentAccount) {
 
                                 case 1 -> {
 
                                     System.out.println("1) Update Username \n2) Update Password \n3) Update Name");
-                                    int choice = scanner.nextInt();     // user's choice
-                                    scanner.nextLine();
+                                    int choice = (int) JOptionPane.showInputDialog(null,
+                                            "1) Update Username \n2) Update Password \n3) Update Name",
+                                            "Menu", JOptionPane.QUESTION_MESSAGE,
+                                            null, teacherOptions, teacherOptions[0]);    // user's choice
                                     thisAccount.updateAccount(scanner, choice);
 
                                 }   // update account
 
                                 case 2 -> {
 
-                                    System.out.println("Enter 1 to confirm, anything else to cancel!");
-                                    int choice = scanner.nextInt();
-                                    scanner.nextLine();
+                                    int choice = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter 1 to confirm, anything else to cancel!",
+                                            "Teacher", JOptionPane.QUESTION_MESSAGE));
 
                                     if (choice == 1) {
 
@@ -445,11 +472,13 @@ public class MainMenu {
 
                             do {
 
-                                System.out.println("Student Quiz Menu");
-                                System.out.println("1) Select Course\n2) View Overall Grade\n3) View Standing\n" +
-                                        "4) View Class Average\n5) Exit");
-
-                                studentQuizChoice = scanner.nextInt();
+                                JOptionPane.showMessageDialog(null, "Student Quiz Menu", "Welcome",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                studentQuizChoice = (int) JOptionPane.showInputDialog(null,
+                                        "1) Select Course\n2) View Overall Grade\n3) View Standing \n4) View Class Average\n" +
+                                                "5) Exit",
+                                        "Menu", JOptionPane.QUESTION_MESSAGE,
+                                        null, quizOptions, quizOptions[0]);
                                 scanner.nextLine();
 
                                 String quizFile = "quiz_database.txt";
@@ -460,7 +489,8 @@ public class MainMenu {
                                     quizzes = new Quiz(quizFile);
                                     Course.initializeCourses();
                                 } catch (IOException e) {
-                                    System.out.println("Error Reading Quiz File!");
+                                    JOptionPane.showMessageDialog(null, "Error Reading Quiz File!", "Goodbye",
+                                            JOptionPane.ERROR_MESSAGE);
                                     break;
                                 }
 
@@ -524,7 +554,8 @@ public class MainMenu {
 
                                                     if (assignedQuiz.get(assignedQuiz.size() - 1).equals(answerChoice)){
 
-                                                        System.out.println("Correct Answer!");
+                                                        JOptionPane.showMessageDialog(null, "Correct Answer!", "Welcome",
+                                                                JOptionPane.INFORMATION_MESSAGE);
 
                                                         newGrade = ((currentStudentAttempts * currentStudentGrade
                                                         ) + 100) / (currentStudentAttempts + 1);
@@ -535,7 +566,8 @@ public class MainMenu {
 
                                                     } else {
 
-                                                        System.out.println("Incorrect Answer!");
+                                                        JOptionPane.showMessageDialog(null, "Incorrect Answer", "Welcome",
+                                                                JOptionPane.INFORMATION_MESSAGE);
 
                                                         newGrade = ((currentStudentAttempts * currentStudentGrade
                                                         )) / (currentStudentAttempts + 1);
@@ -561,14 +593,15 @@ public class MainMenu {
 
                                                     int totalAttempts = thisCourse.getTotalAttempts();
 
-                                                    System.out.printf("Student Attempts for %s Quizzes: %d\n",
-                                                            thisCourse.courseName, totalAttempts);
+                                                    JOptionPane.showMessageDialog(null, "Student Attempts for " + this.courseName + "Quizzes: " + totalAttempts + "\n" , "Welcome",
+                                                            JOptionPane.INFORMATION_MESSAGE);
 
                                                 }
 
                                                 case 4-> {}     // do nothing if user chooses to quit
 
-                                                default -> System.out.println("Invalid Choice!");
+                                                default -> JOptionPane.showMessageDialog(null, "Invalid Choice!", "Goodbye",
+                                                        JOptionPane.ERROR_MESSAGE);
 
                                             }
 
@@ -580,7 +613,9 @@ public class MainMenu {
 
                                         double studentGrade = Course.allStudentGrades.get(
                                                 Course.allGradebookStudents.indexOf(thisAccount.name));
-                                        System.out.printf("Your Average Grade is:\n%.2f %%\n",studentGrade);
+
+                                        JOptionPane.showMessageDialog(null, "Your Average Grade is: \n" + studentGrade + "%%\n", "Welcome",
+                                                JOptionPane.INFORMATION_MESSAGE);
 
                                     }       // Show overall grade
 
@@ -591,22 +626,24 @@ public class MainMenu {
                                         int studentRank = Course.calculateStanding(studentGrade);
                                         int totalStudents = Course.allGradebookStudents.size();
 
-                                        System.out.printf("You rank %d amongst %d students.\n",
-                                                studentRank, totalStudents);
+                                        JOptionPane.showMessageDialog(null, "You rank " + studentRank + "amongst" + totalStudents + "students.\n", "Welcome",
+                                                JOptionPane.INFORMATION_MESSAGE);
                                     }       // Shows student's rank
 
                                     case 4 -> {
 
                                         double averageScore = Course.calculateOverallAverage();
-
-                                        System.out.printf("The Class Average is %.2f\n", averageScore);
+                                        
+                                        JOptionPane.showMessageDialog(null, "The Class Average is " + averageScore + "\n", "Welcome",
+                                                JOptionPane.INFORMATION_MESSAGE);
 
                                     }       // Shows overall class average
 
                                     case 5 -> {}          // does nothing if user decides to exit
 
                                     default -> {
-                                        System.out.println("Invalid Choice!");
+                                        JOptionPane.showMessageDialog(null, "Inavlid Choice", "Goodbye",
+                                                JOptionPane.ERROR_MESSAGE);
                                     }      // invalid choice
 
                                 }
@@ -616,7 +653,8 @@ public class MainMenu {
 
                         } else if (studentOption != 3) {
 
-                            System.out.println("Invalid Option!");
+                            JOptionPane.showMessageDialog(null, "Invalid Option!", "Goodbye",
+                                    JOptionPane.ERROR_MESSAGE);
 
                         }
 
@@ -628,28 +666,29 @@ public class MainMenu {
             } else if (mainOption == 2) {
 
 
-                     String type = "";
+                String type = "";
 
-                     System.out.println("Select User Type:\n1) Teacher\n2) Student");
-                     String typeChoice = scanner.nextLine();
+                System.out.println("Select User Type:\n1) Teacher\n2) Student");
+                String typeChoice = scanner.nextLine();
 
-                     do {
+                do {
 
-                            if (typeChoice.equals("1")) {
+                    if (typeChoice.equals("1")) {
 
-                                type = "teacher";
+                        type = "teacher";
 
-                            } else if (typeChoice.equals("2")) {
+                    } else if (typeChoice.equals("2")) {
 
-                                type = "student";
+                        type = "student";
 
-                            }
+                    }
 
-                        } while (type.equals(""));  // Gets choice for type of user
+                } while (type.equals(""));  // Gets choice for type of user
 
-                     Account newAccount = new Account(scanner, type);
-
-                     System.out.printf("Successfully created account for %s!\n", newAccount.getFullName());
+                Account newAccount = new Account(scanner, type);
+                
+                JOptionPane.showMessageDialog(null, "Successfully created account for" + newAccount.getFullName() + "\n", "Welcome",
+                        JOptionPane.INFORMATION_MESSAGE);
 
 
 
@@ -657,13 +696,15 @@ public class MainMenu {
 
             } else if (mainOption != 3){
 
-                System.out.println("Invalid Option!");
+                JOptionPane.showMessageDialog(null, "Invalid Option!", "Goodbye",
+                        JOptionPane.ERROR_MESSAGE);
 
             }
 
         } while (mainOption != 3);
-
-        System.out.println("Program Closed!");
+        
+        JOptionPane.showMessageDialog(null, "Program Closed!", "Welcome",
+                JOptionPane.INFORMATION_MESSAGE);
 
     }
 
