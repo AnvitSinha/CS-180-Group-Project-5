@@ -93,7 +93,7 @@ public class Server {
                     String courseName = reader.readLine();
                     String quizName = reader.readLine();
 
-                    writer.write(String.valueOf(q.addQuiz(courseName,quizName)));
+                    writer.write(String.valueOf(q.addQuiz(courseName, quizName)));
                     writer.println();
                     writer.flush();
                 }
@@ -109,7 +109,7 @@ public class Server {
                             new ArrayList<String>(Arrays.asList(reader.readLine().split("&")));
                     String correctAnswer = reader.readLine();
 
-                    writer.write(String.valueOf(q.addQuestion(quizName,type,question,answers,correctAnswer)));
+                    writer.write(String.valueOf(q.addQuestion(quizName, type, question, answers, correctAnswer)));
                     writer.println();
                     writer.flush();
 
@@ -133,7 +133,7 @@ public class Server {
                     String quizName = reader.readLine();
                     int questionNum = Integer.parseInt(reader.readLine());
 
-                    writer.write(String.valueOf(q.deleteQuestion(quizName,questionNum)));
+                    writer.write(String.valueOf(q.deleteQuestion(quizName, questionNum)));
                     writer.println();
                     writer.flush();
                 }
@@ -145,7 +145,7 @@ public class Server {
                     String quizName = reader.readLine();
                     String newName = reader.readLine();
 
-                    writer.write(String.valueOf(q.editQuizName(quizName,newName)));
+                    writer.write(String.valueOf(q.editQuizName(quizName, newName)));
                     writer.println();
                     writer.flush();
                 }
@@ -157,7 +157,7 @@ public class Server {
                     String quizName = reader.readLine();
                     String newCourse = reader.readLine();
 
-                    writer.write(String.valueOf(q.editQuizCourse(quizName,newCourse)));
+                    writer.write(String.valueOf(q.editQuizCourse(quizName, newCourse)));
                     writer.println();
                     writer.flush();
                 }
@@ -174,8 +174,8 @@ public class Server {
                             new ArrayList<String>(Arrays.asList(reader.readLine().split("&")));
                     String correctAnswer = reader.readLine();
 
-                    writer.write(String.valueOf(q.editQuestion(quizName,questionNumber,
-                            type,question,answers,correctAnswer)));
+                    writer.write(String.valueOf(q.editQuestion(quizName, questionNumber,
+                            type, question, answers, correctAnswer)));
                     writer.println();
                     writer.flush();
 

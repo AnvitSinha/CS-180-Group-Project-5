@@ -7,7 +7,6 @@ public class QuizFile {
     private ArrayList<Quiz> quizzes;
 
 
-
     //Constructor
     public QuizFile(String fileName) throws Exception {
         this.fileName = fileName;
