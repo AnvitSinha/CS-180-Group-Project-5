@@ -1,0 +1,67 @@
+lineQuizSeparator
+MA 161
+Midterm 5
+questionSeparator
+TF
+2+2?
+True
+False
+4
+questionSeparator
+lineQuizSeparator
+MA 161
+Midterm 6
+questionSeparator
+MCQ
+Is the Earth round?
+answer 1
+answer 2
+answer 3
+answer 4
+answer 4
+questionSeparator
+MCQ
+Is the Earth round?
+answer 1
+answer 2
+answer 3
+answer 4
+answer 4
+questionSeparator
+MCQ
+Is the Earth round?
+answer 1
+answer 2
+answer 3
+answer 4
+answer 4
+questionSeparator
+MCQ
+Is the Earth round?
+answer 1
+answer 2
+answer 3
+answer 4
+answer 4
+questionSeparator
+MCQ
+Is the Earth round?
+answer 1
+answer 2
+answer 3
+answer 4
+answer 4
+questionSeparator
+lineQuizSeparator
+CS 180
+Final Exam
+questionSeparator
+MCQ
+Is the Earth round?
+answer 1
+answer 2
+answer 3
+answer 4
+answer 4
+questionSeparator
+lineQuizSeparator
