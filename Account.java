@@ -121,7 +121,7 @@ public class Account {
 
         if (type.equals("student")) {
 
-            Course.addNewStudent(this.name);
+            GradeBook.addNewStudent(this.name);
 
         }
 
@@ -130,7 +130,7 @@ public class Account {
 
     public Account(String username, String password) {
 
-        this.accountNumber = allPasswords.indexOf(password);
+        this.accountNumber = allUsernames.indexOf(username);
         this.username = allUsernames.get(accountNumber);
         this.password = allPasswords.get(accountNumber);
         this.name = allNames.get(accountNumber);
@@ -269,16 +269,15 @@ public class Account {
 
     public int getAccountSeed() {
 
-        String[] firstAndLast = this.name.split(" ");
+        int first = this.password.length();         // length of password
+        int second = this.username.length();        // length of username
+        int third = this.name.length();             // length of name
+        int fourth = this.password.charAt(first/2); // integer representation of middle character of password
+        int fifth = this.username.charAt(second/2); // integer representation of middle character of username
 
-        int first = firstAndLast[0].length();           // length of first name
-        int second = firstAndLast[1].length();          // length of last name
-        int third = firstAndLast[0].charAt(first/2);    // integer representation of middle letter of first name
-        int fourth = firstAndLast[1].charAt(second/2);  // integer representation of middle letter of last name
+        return (first + second + third + fourth + fifth);
 
-        return (first + second + third + fourth);
-
-    }   // creates a random seed for an account
+    }   // creates a random seed for an account based on username and password of the user
 
     public String getUsername() {
         return this.username;
