@@ -1,0 +1,188 @@
+import java.io.*;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Server {
+
+    public static void main(String[] args) {
+        try {
+            QuizFile q = new QuizFile("quiz_tester.txt");
+            ServerSocket serverSocket = new ServerSocket(6969);
+            Socket socket = serverSocket.accept();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
+            ArrayList<String> usernameList = new ArrayList<String>();
+            ArrayList<String> passwordList = new ArrayList<String>();
+
+            String currentLine;
+
+            String[] usernameArray;
+            String[] passwordArray;
+
+            int verifiedNumber = 0;
+            String currentPassword = "";
+            String currentUsername = "";
+            int arrayIndex = 0;
+
+            while (true) {
+
+                currentLine = reader.readLine();
+
+                if (currentLine != null) {
+
+                    switch (currentLine) {
+
+                        case "Verify" -> {
+                            //1: List does not contain username
+                            //2: Username and password not correct
+                            //3: Credentials valid
+
+                            currentUsername = reader.readLine();
+                            currentPassword = reader.readLine();
+
+                            if (!(usernameList.contains(currentUsername))) {
+                                writer.println("1");
+                            } else {
+                                for (int i = 0; i < usernameList.size(); i++) {
+                                    if (usernameList.get(i).equals(currentUsername)) {
+                                        arrayIndex = i;
+                                    }
+                                }
+                                if (currentPassword.equals(passwordList.get(arrayIndex))) {
+                                    writer.println("3");
+                                } else {
+                                    writer.println("2");
+                                }
+                            }
+                        }
+
+                        case "UpdateFile" -> {
+                            currentUsername = reader.readLine();
+                            currentPassword = reader.readLine();
+
+                            usernameList.add(currentUsername);
+                            passwordList.add(currentPassword);
+                        }
+
+                        case "Initialize" -> {
+                            usernameArray = currentLine.split(",");
+                            currentLine = reader.readLine();
+                            passwordArray = currentLine.split(",");
+
+                            for (int i = 0; i < usernameArray.length; i++) {
+                                usernameList.add(usernameArray[i]);
+                            }
+
+                            for (int i = 0; i < passwordArray.length; i++) {
+                                passwordList.add(passwordArray[i]);
+                            }
+                        }
+
+                        case "printQuiz" -> {
+                            String quizName = reader.readLine();
+                            Quiz myQuiz = q.getQuiz(quizName);
+                            writer.write(myQuiz.stringify());
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "addQuiz" -> {
+
+                            String courseName = reader.readLine();
+                            String quizName = reader.readLine();
+
+                            writer.write(String.valueOf(q.addQuiz(courseName, quizName)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "addQuestion" -> {
+                            String quizName = reader.readLine();
+                            int type = Integer.parseInt(reader.readLine());
+                            String question = reader.readLine();
+                            ArrayList<String> answers =
+                                    new ArrayList<String>(Arrays.asList(reader.readLine().split("&")));
+                            String correctAnswer = reader.readLine();
+
+                            writer.write(String.valueOf(q.addQuestion(quizName, type, question, answers, correctAnswer)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "deleteQuiz" -> {
+                            String quizName = reader.readLine();
+
+                            writer.write(String.valueOf(q.deleteQuiz(quizName)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "deleteQuestion" -> {
+                            String quizName = reader.readLine();
+                            int questionNum = Integer.parseInt(reader.readLine());
+
+                            writer.write(String.valueOf(q.deleteQuestion(quizName, questionNum)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "editQuizName" -> {
+                            String quizName = reader.readLine();
+                            String newName = reader.readLine();
+
+                            writer.write(String.valueOf(q.editQuizName(quizName, newName)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "editQuizCourse" -> {
+                            String quizName = reader.readLine();
+                            String newCourse = reader.readLine();
+
+                            writer.write(String.valueOf(q.editQuizCourse(quizName, newCourse)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "editQuestion" -> {
+
+                            String quizName = reader.readLine();
+                            int questionNumber = Integer.parseInt(reader.readLine());
+                            int type = Integer.parseInt(reader.readLine());
+                            String question = reader.readLine();
+                            ArrayList<String> answers =
+                                    new ArrayList<String>(Arrays.asList(reader.readLine().split("&")));
+                            String correctAnswer = reader.readLine();
+
+                            writer.write(String.valueOf(q.editQuestion(quizName, questionNumber,
+                                    type, question, answers, correctAnswer)));
+                            writer.println();
+                            writer.flush();
+                        }
+
+                        case "printCourseQuizzes" -> {
+                            String courseName = reader.readLine();
+                            ArrayList<Quiz> myQuiz = q.getCourseQuizzes(courseName);
+
+                            StringBuilder sb = new StringBuilder();
+
+                            for (Quiz temp : myQuiz) {
+
+                                sb.append(temp.stringify());
+                            }
+
+                            writer.write(sb.toString());
+                            writer.println();
+                            writer.flush();
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
