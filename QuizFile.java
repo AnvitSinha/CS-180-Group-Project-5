@@ -283,6 +283,19 @@ public class QuizFile {
         return null;
     }
 
+    //gets all quizzes with the specified courseName
+    public ArrayList<Quiz> getCourseQuizzes(String courseName) {
+
+        ArrayList<Quiz> qui = new ArrayList<>();
+        for (Quiz checker : quizzes) {
+            if (checker.getCourse().equals(courseName)) {
+
+                qui.add(checker);
+            }
+        }
+        return qui;
+    }
+
     //Debugging method
     public void printQuiz(String name) {
 
@@ -306,18 +319,7 @@ public class QuizFile {
         }
     }
 
-    //gets all quizzes with the specified courseName
-    public ArrayList<Quiz> getCourseQuizzes(String courseName) {
 
-        ArrayList<Quiz> qui = new ArrayList<>();
-        for (Quiz checker : quizzes) {
-            if (checker.getCourse().equals(courseName)) {
-
-                qui.add(checker);
-            }
-        }
-        return qui;
-    }
 
     //Debugging Method
     @Override

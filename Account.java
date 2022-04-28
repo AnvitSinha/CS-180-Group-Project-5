@@ -29,6 +29,11 @@ public class Account {
 
     public static void initializeAccounts() throws IOException {
 
+        allNames = new ArrayList<>();
+        allTypes = new ArrayList<>();
+        allPasswords = new ArrayList<>();
+        allUsernames = new ArrayList<>();
+
         BufferedReader bfr = new BufferedReader(new FileReader(accountsFile));
 
         String line;
@@ -47,7 +52,8 @@ public class Account {
 
     }
 
-    private static void updateDatabaseFile() throws IOException {
+    public static void updateDatabaseFile() throws IOException {
+
 
         PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, false));
 
@@ -57,7 +63,11 @@ public class Account {
                     allTypes.get(i));
 
             pw.println(toWrite);
+            pw.flush();
+
         }
+
+        pw.close();
 
     }
 
@@ -102,6 +112,12 @@ public class Account {
         pw.close();
 
         return true;
+
+    }
+
+    public static ArrayList<String> get() {
+
+        return allPasswords;
 
     }
 
@@ -154,6 +170,7 @@ public class Account {
         this.username = allUsernames.get(accountNumber);
         this.password = allPasswords.get(accountNumber);
         this.name = allNames.get(accountNumber);
+        this.type = allTypes.get(accountNumber);
 
 
     }
@@ -171,23 +188,32 @@ public class Account {
 
     }
 
-    public void deleteAccount() throws IOException {
+    public boolean deleteAccount() {
 
-        // remove account from database arraylists
-        allNames.remove(this.accountNumber);
-        allPasswords.remove(this.accountNumber);
-        allTypes.remove(this.accountNumber);
-        allUsernames.remove(this.accountNumber);
+        try {
+            // remove account from database arraylists
+            allNames.remove(this.accountNumber);
+            allPasswords.remove(this.accountNumber);
+            allTypes.remove(this.accountNumber);
+            allUsernames.remove(this.accountNumber);
 
-        // set all fields to blank
-        this.username = "";
-        this.password = "";
-        this.name = "";
-        this.type = "";
-        this.accountNumber = -1;    // set account number to -1 (invalid index)
+            // set all fields to blank
+            this.username = "";
+            this.password = "";
+            this.name = "";
+            this.type = "";
+            this.accountNumber = -1;    // set account number to -1 (invalid index)
 
-        // Update the database
-        Account.updateDatabaseFile();
+            // Update the database
+            Account.updateDatabaseFile();
+
+            return true;
+
+        } catch (IOException e) {
+
+            return false;
+
+        }
 
     }
 
@@ -267,7 +293,9 @@ public class Account {
 
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s", this.name, this.username, this.password, this.type);
+
+        return String.format("Name: %s\nUsername: %s\nAssociated Type: %s\nAccount Number: %s",
+        this.name, this.username, this.type, this.accountNumber);
     }
 
 }

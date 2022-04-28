@@ -11,6 +11,11 @@ public class GradeBook {
 
     public static void initializeStudentGradebook() throws IOException {
 
+        allGradebookStudents = new ArrayList<>();
+        allQuizNames = new ArrayList<>();
+        allStudentScores = new ArrayList<>();
+        allCourseName = new ArrayList<>();
+
         BufferedReader bfr = new BufferedReader(new FileReader(studentGradebook));
 
         String line;
@@ -66,7 +71,7 @@ public class GradeBook {
 
         return position;
 
-    }
+    }   // TODO
 
     public static double calculateCourseAverage(String courseName) {
 
@@ -87,22 +92,6 @@ public class GradeBook {
         return (sum / num);
 
     } // Finds the average in that course for all students
-
-    public static boolean addNewStudent(String name, String quizName, String courseName) {
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(studentGradebook, true))) {
-
-            pw.println(String.format("%s,%s,0.00,%s", name, quizName, courseName));      // Add student with 0 quizzes taken and 0 as average
-
-            return true;
-
-        } catch (IOException e) {
-
-            return false;
-
-        }
-
-    }
 
     public static double calculateStudentAverage(String studentName) {
 
@@ -145,6 +134,27 @@ public class GradeBook {
         }
 
         return (sum / num);
+
+    }
+
+    public static boolean addNewSubmission(String studentName, String quizName, double score, String courseName) {
+
+        allGradebookStudents.add(studentName);
+        allQuizNames.add(quizName);
+        allStudentScores.add(score);
+        allCourseName.add(courseName);
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(studentGradebook, true))) {
+
+            pw.println(String.format("%s,%s,%.2f,%s", studentName, quizName, score, courseName));
+
+            return true;
+
+        } catch (IOException e) {
+
+            return false;
+
+        }
 
     }
 

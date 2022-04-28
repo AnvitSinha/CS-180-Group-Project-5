@@ -65,6 +65,9 @@ public class Course {
 
     public static void initializeCourses() throws IOException {
 
+        allCourses = new ArrayList<>();
+        totalQuizzes = new ArrayList<>();
+
         BufferedReader bfr = new BufferedReader(new FileReader(coursesFile));
 
         String line;
