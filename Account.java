@@ -47,20 +47,16 @@ public class Account {
 
     }
 
-    private static void updateDatabaseFile() {
+    private static void updateDatabaseFile() throws IOException {
 
-        try (PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, false))) {
+        PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, false));
 
-            for (int i = 0; i < allNames.size(); i++) {
+        for (int i = 0; i < allNames.size(); i++) {
 
-                String toWrite = String.format("%s,%s,%s,%s", allNames.get(i), allUsernames.get(i), allPasswords.get(i),
-                        allTypes.get(i));
+            String toWrite = String.format("%s,%s,%s,%s", allNames.get(i), allUsernames.get(i), allPasswords.get(i),
+                    allTypes.get(i));
 
-                pw.println(toWrite);
-            }
-
-        } catch (IOException e) {
-            System.out.println("An Error Occurred!");
+            pw.println(toWrite);
         }
 
     }
@@ -77,6 +73,35 @@ public class Account {
             // returns true if username and password belong to the same account
 
         }
+
+    }
+
+    public static boolean isValidUsername(String username) {
+
+        return !allUsernames.contains(username);    // username is valid (true) if it isn't in allUsernames already
+
+    }
+
+    public static boolean addNewAccount(String name, String username, String password, String type) throws IOException {
+
+        if (!isValidUsername(username)) {
+
+            return false;
+
+        }
+
+        allUsernames.add(username);
+        allNames.add(name);
+        allPasswords.add(password);
+        allTypes.add(type);
+
+        PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, true));
+
+        pw.println(String.format("%s,%s,%s,%s", name, username, password, type));
+
+        pw.close();
+
+        return true;
 
     }
 
@@ -119,18 +144,13 @@ public class Account {
             System.out.println("An Error Occurred!");
         }
 
-        if (type.equals("student")) {
-
-            Course.addNewStudent(this.name);
-
-        }
 
 
     }   // Get user's login info and add account to database
 
     public Account(String username, String password) {
 
-        this.accountNumber = allPasswords.indexOf(password);
+        this.accountNumber = allUsernames.indexOf(username);
         this.username = allUsernames.get(accountNumber);
         this.password = allPasswords.get(accountNumber);
         this.name = allNames.get(accountNumber);
@@ -138,7 +158,7 @@ public class Account {
 
     }
 
-    public Account(String firstName, String lastName, String username, String password, String type) {
+    public Account(String firstName, String lastName, String username, String password, String type) throws IOException {
 
         this.username = username;
         allUsernames.add(username);
@@ -147,17 +167,11 @@ public class Account {
         this.name = firstName + " " + lastName;
         this.type = type;
 
-        try (PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, true))) {
-
-            pw.println(this.toString());
-
-        } catch (IOException e) {
-            System.out.println("An Error Occurred!");;
-        }
+        Account.updateDatabaseFile();
 
     }
 
-    public void deleteAccount() {
+    public void deleteAccount() throws IOException {
 
         // remove account from database arraylists
         allNames.remove(this.accountNumber);
@@ -174,93 +188,57 @@ public class Account {
 
         // Update the database
         Account.updateDatabaseFile();
-        System.out.println("Successfully Deleted");
 
     }
 
-    public void updateAccount(Scanner scanner, int choice) {
+    public boolean updateUsername(String newUsername) throws IOException {
 
-        switch (choice) {
+        if (newUsername.equals(this.username)) {
 
-            case 1 -> {
+            return false;
 
-                String username;
-                boolean valid = true;   // initialize boolean to check if valid new username is given
+        } else if (!isValidUsername(newUsername)) {
 
-                do {
+            return false;
 
-                    System.out.println("Enter a Username:");
-                    username = scanner.nextLine();
+        } else {
 
-                    if (username.equals(this.username)) {       // if current username is entered
-
-                        System.out.println("New Username cannot be same as older Username!");
-                        valid = false;
-
-                    } else if(!isValidUsername(username)) {     // if username is valid
-                        System.out.println("Username is already taken!");
-                        valid = false;
-                    }   // Invalid username message
-
-                } while(!valid);  // Username not valid check
-
-                this.username = username;
-                allUsernames.set(this.accountNumber, username);
-
-            }       // Update username
-
-            case 2 -> {
-
-                String password;
-
-                do {
-
-                    System.out.println("Enter a Password:");
-                    password = scanner.nextLine();
-
-                    if (password.equals(this.password)) {   // checks if same password entered
-
-                        System.out.println("New Password cannot be same as older Password!");
-
-                    }
-
-                } while(password.equals(this.password));  // Username not valid check
-
-                this.password = password;
-                allPasswords.set(this.accountNumber, password);
-
-            }       // update password
-
-            case 3 -> {
-
-                System.out.println("Enter new Name:");
-                String newName = scanner.nextLine();
-
-                this.name = newName;        // sets new name
-                allNames.set(this.accountNumber, newName);
-
-            }       // update name
-
-            default -> {
-                System.out.println("Invalid Choice!");
-            }       // invalid choice
+            this.username = newUsername;
+            allUsernames.set(this.accountNumber, newUsername);
+            Account.updateDatabaseFile();
+            return true;
 
         }
 
-        System.out.println("Credentials Changed!");
+    }
 
-        Account.updateDatabaseFile();   // update database file
+    public boolean updatePassword(String newPassword) throws IOException {
+
+        if (newPassword.equals(this.password)) {
+
+            return false;
+
+        } else {
+
+            this.password = newPassword;
+            allPasswords.set(this.accountNumber, newPassword);
+            Account.updateDatabaseFile();
+            return true;
+
+        }
+
+    }
+
+    public void updateName(String newName) throws IOException {
+
+        this.name = newName;
+        allNames.set(this.accountNumber, newName);
+        Account.updateDatabaseFile();
 
     }
 
     public String getType() {
         return allTypes.get(this.accountNumber);
-    }
-
-    public boolean isValidUsername(String username) {
-
-        return !allUsernames.contains(username);    // username is valid (true) if it isn't in allUsernames already
-
     }
 
     public String getFullName() {
@@ -269,16 +247,15 @@ public class Account {
 
     public int getAccountSeed() {
 
-        String[] firstAndLast = this.name.split(" ");
+        int first = this.password.length();         // length of password
+        int second = this.username.length();        // length of username
+        int third = this.name.length();             // length of name
+        int fourth = this.password.charAt(first/2); // integer representation of middle character of password
+        int fifth = this.username.charAt(second/2); // integer representation of middle character of username
 
-        int first = firstAndLast[0].length();           // length of first name
-        int second = firstAndLast[1].length();          // length of last name
-        int third = firstAndLast[0].charAt(first/2);    // integer representation of middle letter of first name
-        int fourth = firstAndLast[1].charAt(second/2);  // integer representation of middle letter of last name
+        return (first + second + third + fourth + fifth);
 
-        return (first + second + third + fourth);
-
-    }   // creates a random seed for an account
+    }   // creates a random seed for an account based on username and password of the user
 
     public String getUsername() {
         return this.username;
@@ -288,24 +265,8 @@ public class Account {
         return this.password;
     }
 
-    public void setUsername(String username) {
-        allUsernames.set(allUsernames.indexOf(this.username), username);
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        allPasswords.set(allPasswords.indexOf(this.password), password);
-        this.password = password;
-    }
-
-    public void setFullName(String fullName) {
-        allNames.set(allNames.indexOf(this.name), fullName);
-        this.name = fullName;
-    }
-
     @Override
     public String toString() {
-        System.out.println(this.type);
         return String.format("%s,%s,%s,%s", this.name, this.username, this.password, this.type);
     }
 
