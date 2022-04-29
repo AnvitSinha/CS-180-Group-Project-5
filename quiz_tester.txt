@@ -1,0 +1,259 @@
+lineQuizSeparator
+MA 161
+Trig Quiz
+questionSeparator
+TF
+cos(pi) = 0?
+True
+False
+True
+questionSeparator
+What is 45 degrees in radians?
+pi
+pi/45
+pi/2
+pi/3
+pi/4
+pi/4
+questionSeparator
+MCQ
+sin(0) = ___
+0
+pi
+3pi/2
+1
+1
+questionSeparator
+TF
+is 3pi/2 in degrees 270 degrees?
+True
+False
+True
+questionSeparator
+lineQuizSeparator
+MA 161
+Antiderivative Quiz
+questionSeparator
+MCQ
+What is the antiderivative of 1 dx?
+0
+x/2
+2/3
+x/4
+x
+x
+questionSeparator
+MCQ
+What is the antiderivative of 2x^2 dx?
+4
+4x
+2/3x^3
+x^3
+2/3x^3
+questionSeparator
+MCQ
+What is the antiderivative of 1/y dy?
+-1y^2
+y^3
+ln(y)
+x
+ln(y)
+questionSeparator
+lineQuizSeparator
+MA 161
+Limits Quiz
+questionSeparator
+MCQ
+What is the limit as x approaches infinity of x?
+1
+0
+negative infinity
+infinity
+infinity
+questionSeparator
+MCQ
+What is the limit as x approaches infinity of 3x/x
+infinity
+negative infinity
+0
+3
+3
+questionSeparator
+TF
+The limit as x approaches infinity of 2/x = 1?
+True
+False
+False
+questionSeparator
+lineQuizSeparator
+MA 161
+Integral Quiz
+questionSeparator
+TF
+The area under the curve of 1 from x = 1 to x = 2 == 8?
+True
+False
+False
+questionSeparator
+MCQ
+The area under the curve of x from x = 0 to x = 10 == ___?
+0
+x
+10
+100
+10
+questionSeparator
+TF
+The area under the curve 2y from y = 18 to y = 19 == 189?
+True
+False
+False
+questionSeparator
+lineQuizSeparator
+MA 161
+Exponent Rules quiz
+questionSeparator
+MCQ
+Simplify the following, 13x^3 - 12x^2 + 12x^2.
+12x^2
+x^2
+x^3
+13x^3
+13x^3
+questionSeparator
+TF
+Simplify the following, 2x^2 + 4x^2.
+8x^2
+6x^2
+x^2
+6x^2
+questionSeparator
+TF
+The following is simplified fully, 2x^2 + 6x^3 + x^4 - 2x.
+True
+False
+True
+questionSeparator
+lineQuizSeparator
+CS 180
+Final Exam
+questionSeparator
+MCQ
+what is the error thrown while using the integerParsInt method?
+Illegal Aruguement Exception
+Numberformat Exception
+I/O format Exception
+Nullpointer Exception
+Numberformat Exception
+questionSeparator
+TF
+Java
+Is Java Fun?
+T
+F
+T
+questionSeparator
+TF
+GUIs
+Java cannot create GUIs without 3rd party extensions
+T
+F
+F
+questionSeparator
+lineQuizSeparator
+CS 180
+Data Types Quiz
+questionSeparator
+MCQ
+What should be used to store the number 2.02?
+int
+byte
+double
+string
+double
+questionSeparator
+TF
+Strings can only be used for characters.
+True
+False
+False
+questionSeparator
+MCQ
+What can be used to store "GOPURDUE!"?
+int
+string
+double
+string
+questionSeparator
+lineQuizSeparator
+CS 180
+Repitition Quiz
+questionSeparator
+TF
+A for loop should be used for counter controlled events.
+True
+False
+True
+questionSeparator
+MCQ
+Which loop guarantees at least one execution of the main body of the loop?
+while
+for
+do while
+do while
+questionSeparator
+TF
+Which loop should be used for an event controlled execution?
+for
+while
+enhanced for
+while
+questionSeparator
+lineQuizSeparator
+CS180
+Object Quiz
+questionSeparator
+MCQ
+What are the helper methods called when using object oriented programming?
+helpers
+objects
+getters/setters
+getters/setters
+questionSeparator
+TF
+You should use a constructor to help build an object in java.
+True
+False
+True
+questionSeparator
+TF
+When using subclasses or interfaces, you need to declare this while using the keywords "interface" or "subclass".
+True
+False
+False
+questionSeparator
+quizLineSeparator
+CS 180
+Selection Quiz
+questionSeparator
+TF
+the "if" selection construct needs to be surrounded by "{}" in order to work.
+True
+False
+False
+questionSeparator
+MCQ
+What is the value of the following, x=2, if(x == 2) { y = 2} else { y = 0}?
+0
+Runtime Error
+2
+1
+2
+questionSeparator
+TF
+You need to always use the else keyword after an if construct.
+True
+False
+False
+questionSeparator
+lineQuizSeparator
