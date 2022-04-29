@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 /**
  * Project 5 - Course
  * <p>
@@ -161,5 +160,7 @@ public class Course {
         return assigned;
 
     }
+
+    //TODO Update course file to reflect quiz changes
 
 }

@@ -262,8 +262,6 @@ public class MainServer implements Runnable {
                                     sb.append(temp.stringify());
                                 }
 
-                                System.out.println(sb.toString());
-
                                 writer.write(sb.toString());
                                 writer.println();
                                 writer.flush();
@@ -313,6 +311,17 @@ public class MainServer implements Runnable {
                                 writer.println(response);
                                 writer.flush();
                             }
+
+                        }
+
+                        case "courseDetails" -> {
+
+                            String courseName = reader.readLine();
+
+                            Course temp = new Course(courseName, q);
+
+                            writer.println(temp.toString());
+                            writer.flush();
 
                         }
 

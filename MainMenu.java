@@ -386,6 +386,14 @@ public class MainMenu {
 
                                                         }
 
+                                                        String courseName = courseChoice.substring(
+                                                                courseChoice.indexOf(" ") + 1);
+
+                                                        Course thisCourse = new Course(courseName, q);
+
+                                                        String[] courseMenuOptions = {"List Course Details", "List Quizzes",
+                                                        "Add Quiz", "Remove Quiz"};
+
                                                         //TODO
 
 
@@ -549,16 +557,88 @@ public class MainMenu {
 
                                                         }
 
-                                                        send.println("getCourseQuizzes");
-                                                        send.flush();
+                                                        String courseName = courseChoice.substring(
+                                                                courseChoice.indexOf(" ") + 1);
 
-                                                        String courseName = courseChoice.substring(courseChoice.indexOf(" ") + 1);
-                                                        send.println(courseName);
-                                                        send.flush();
+                                                        Course thisCourse = new Course(courseName, q);
 
-                                                        String sentFromServer = get.readLine();
-                                                        System.out.println(quizFormatter(sentFromServer));
-                                                        //TODO
+                                                        String[] courseMenuOptions = {"Course Details", "List Quizzes",
+                                                                "Your Course Grade", "Course Average"};
+
+                                                        int courseMenu = JOptionPane.showOptionDialog(null,
+                                                                "Please Select Your Choice",
+                                                                String.format("%s: %s Menu Options", name, courseName),
+                                                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                                                                courseMenuOptions, null);
+
+                                                        switch (courseMenu) {
+
+                                                            case 0 -> {
+
+                                                                send.println("courseDetails");
+                                                                send.flush();
+
+                                                                send.println(thisCourse.courseName);
+                                                                send.flush();
+
+                                                                JTextArea courseDetails = new JTextArea("Course Details:\n");
+                                                                courseDetails.append(get.readLine() + "\n");
+                                                                courseDetails.append(get.readLine() + "\n");
+                                                                courseDetails.append(get.readLine());
+
+                                                                courseDetails.setRows(4);
+                                                                courseDetails.setLineWrap(true);
+                                                                courseDetails.setEditable(false);
+
+                                                                JOptionPane.showMessageDialog(null,
+                                                                        courseDetails,
+                                                                        String.format("%s: %s Details", name, thisCourse.courseName),
+                                                                        JOptionPane.INFORMATION_MESSAGE);
+
+                                                            }
+
+                                                            case 1 -> {} //TODO
+
+                                                            case 2 -> {
+
+                                                                send.println("studentInCourse");
+                                                                send.flush();
+
+                                                                send.println(name);
+                                                                send.flush();
+
+                                                                send.println(thisCourse.courseName);
+                                                                send.flush();
+
+                                                                double courseGrade = Double.parseDouble(get.readLine());
+
+                                                                JOptionPane.showMessageDialog(null,
+                                                                        String.format("Your Grade in %s is: %.2f",
+                                                                                thisCourse.courseName, courseGrade),
+                                                                        String.format("%s: Course Grade", name),
+                                                                        JOptionPane.INFORMATION_MESSAGE);
+
+                                                            }
+
+                                                            case 3 -> {
+
+                                                                send.println("courseAverage");
+                                                                send.flush();
+
+                                                                send.println(thisCourse.courseName);
+                                                                send.flush();
+
+                                                                double courseGrade = Double.parseDouble(get.readLine());
+
+                                                                JOptionPane.showMessageDialog(null,
+                                                                        String.format("Your Grade in %s is: %.2f",
+                                                                                thisCourse.courseName, courseGrade),
+                                                                        String.format("%s: Course Grade", name),
+                                                                        JOptionPane.INFORMATION_MESSAGE);
+
+                                                            }
+
+                                                        }
 
                                                     } while (!courseChoice.equals("Exit"));
 
