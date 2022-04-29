@@ -1,11 +1,10 @@
-import javax.xml.stream.FactoryConfigurationError;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
+
 
 /**
- * Project 4 - Course
+ * Project 5 - Course
  * <p>
  * Class that manages all courses by storing them into a database and reading from the database when needed.
  * The class also includes helper methods that help in adding courses, initializing courses, and also holds the
@@ -52,6 +51,21 @@ public class Course {
 
         allCourses.add(courseName);
         totalQuizzes.add(0);
+
+        return Course.updateCourseFile();
+
+    }
+
+    public static boolean deleteCourse(String courseName) {
+
+        if (!allCourses.contains(courseName)) {
+
+            return false;
+
+        }
+
+        allCourses.remove(courseName);
+        totalQuizzes.remove(allCourses.indexOf(courseName));
 
         return Course.updateCourseFile();
 

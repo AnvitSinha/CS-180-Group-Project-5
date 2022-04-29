@@ -303,6 +303,19 @@ public class MainServer implements Runnable {
 
                         }
 
+                        case "deleteCourse" -> {
+
+                            synchronized (GATEKEEPER) {
+                                String courseName = reader.readLine();
+
+                                String response = String.valueOf(Course.deleteCourse(courseName));
+
+                                writer.println(response);
+                                writer.flush();
+                            }
+
+                        }
+
                         //GradeBook Options
                         case "standing" -> {
 

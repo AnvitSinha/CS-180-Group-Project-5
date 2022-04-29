@@ -91,7 +91,7 @@ public class GradeBook {
 
         return (sum / num);
 
-    } // Finds the average in that course for all students
+    } //Finds the average in that course for all students
 
     public static double calculateStudentAverage(String studentName) {
 
@@ -111,7 +111,7 @@ public class GradeBook {
 
         return (sum / num);
 
-    }
+    }   //Find student's overall average
 
     public static double studentCourseGrade(String studentName, String courseName) {
 
@@ -135,7 +135,7 @@ public class GradeBook {
 
         return (sum / num);
 
-    }
+    }   //Find student's average in course
 
     public static boolean addNewSubmission(String studentName, String quizName, double score, String courseName) {
 
