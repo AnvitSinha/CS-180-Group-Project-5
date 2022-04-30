@@ -154,8 +154,9 @@ public class MainServer implements Runnable {
                         case "printQuiz" -> {
                             synchronized (GATEKEEPER) {
                                 String quizName = reader.readLine();
+                                String type = reader.readLine();
                                 Quiz myQuiz = q.getQuiz(quizName);
-                                writer.write(myQuiz.stringify());
+                                writer.write(myQuiz.stringify(type));
                                 writer.println();
                                 writer.flush();
                             }
@@ -253,13 +254,14 @@ public class MainServer implements Runnable {
                             synchronized (GATEKEEPER) {
 
                                 String courseName = reader.readLine();
+                                String type = reader.readLine();
                                 ArrayList<Quiz> myQuiz = q.getCourseQuizzes(courseName);
 
                                 StringBuilder sb = new StringBuilder();
 
                                 for (Quiz temp : myQuiz) {
 
-                                    sb.append(temp.stringify());
+                                    sb.append(temp.stringify(type));
                                 }
 
                                 writer.write(sb.toString());
@@ -267,6 +269,21 @@ public class MainServer implements Runnable {
                                 writer.flush();
 
                             }
+                        }
+
+                        case "listQuizNames" -> {
+
+                            String courseName = reader.readLine();
+                            ArrayList<String> myQuizName = q.getCourseQuizName(courseName);
+
+                            writer.println(myQuizName.size());
+
+                            for (String s : myQuizName) {
+
+                                writer.println(s);
+
+                            }
+
                         }
 
                         // Course options
@@ -286,6 +303,7 @@ public class MainServer implements Runnable {
                         case "listCourses" -> {
 
                             synchronized (GATEKEEPER) {
+
                                 ArrayList<String> allCourses = Course.listCourses();
 
                                 writer.println(allCourses.size());
@@ -326,19 +344,6 @@ public class MainServer implements Runnable {
                         }
 
                         //GradeBook Options
-                        case "standing" -> {
-
-                            synchronized (GATEKEEPER) {
-                                double studentScore = Double.parseDouble(reader.readLine());
-
-                                String response = String.valueOf(GradeBook.calculateStanding(studentScore));
-
-                                writer.println(response);
-                                writer.flush();
-                            }
-
-                        }
-
                         case "courseAverage" -> {
 
                             synchronized (GATEKEEPER) {
@@ -375,6 +380,21 @@ public class MainServer implements Runnable {
 
                                 writer.println(response);
                                 writer.flush();
+                            }
+
+                        }
+
+                        case "quizSubmissions" -> {
+
+                            String quiz =  reader.readLine();
+                            ArrayList<String> submissions = GradeBook.viewQuizSubmissions(quiz);
+
+                            writer.println(submissions.size());
+
+                            for (String submission : submissions) {
+
+                                writer.println(submission);
+
                             }
 
                         }

@@ -1,0 +1,13 @@
+Anvit Sinha,anvsinha,anvsinproj4,student
+Alec Schmidt,alschmidt,alcschmproj4,student
+Buster Dunsmore,bdunsmore,busterproj4duns,teacher
+George Wu,georgewu,gwuproj4,student
+Kedar Abhyankar,kdarabhy,proj4kdarabhy,teacher
+Temiko Chichinadze,temikoch,teimurazproj4,student
+Colten Glover,coltenglo,colterproj4,teacher
+Trial T,trial,trial,teacher
+Allen Wang,allWang,allWangPass,student
+Justin Westphal,jwestph,bluejay16,student
+Yeasir Reyhan,yreyhan,trialyreyhan,teacher
+Morgan Kling,mrkling,mrklingpass,student
+Trial S ,trialstu,trialstu,student

@@ -63,7 +63,7 @@ public class Quiz {
     }
 
     //Alternative toString method for server specific formatting
-    public String stringify() {
+    public String stringify(String type) {
 
         StringBuilder sb = new StringBuilder();
         sb.append(course);
@@ -71,7 +71,7 @@ public class Quiz {
         sb.append(name);
         sb.append("&");
         for (Question question : questions) {
-            sb.append(question.stringify());
+            sb.append(question.stringify(type));
         }
 
         return sb.toString();

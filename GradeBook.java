@@ -1,4 +1,5 @@
 import java.io.*;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 public class GradeBook {
@@ -8,6 +9,7 @@ public class GradeBook {
     public static ArrayList<String> allQuizNames = new ArrayList<>();           // Name for each quiz taken in order
     public static ArrayList<Double> allStudentScores = new ArrayList<>();       // Score for each quiz in order
     public static ArrayList<String> allCourseName = new ArrayList<>();          // Name of all associated courses
+    public static ArrayList<String> allSubmissionTimes = new ArrayList<>();  // All Submission times in order
 
     public static void initializeStudentGradebook() throws IOException {
 
@@ -15,6 +17,7 @@ public class GradeBook {
         allQuizNames = new ArrayList<>();
         allStudentScores = new ArrayList<>();
         allCourseName = new ArrayList<>();
+        allStudentScores = new ArrayList<>();
 
         BufferedReader bfr = new BufferedReader(new FileReader(studentGradebook));
 
@@ -28,6 +31,7 @@ public class GradeBook {
             allQuizNames.add(splitWords[1]);
             allStudentScores.add(Double.parseDouble(splitWords[2]));
             allCourseName.add(splitWords[3]);
+            allSubmissionTimes.add(splitWords[4]);
 
         }
 
@@ -40,8 +44,8 @@ public class GradeBook {
 
             for (int i = 0; i < allGradebookStudents.size(); i++) {
 
-                pw.println(String.format("%s,%s,%.2f,%s", allGradebookStudents.get(i),
-                        allQuizNames.get(i), allStudentScores.get(i), allCourseName.get(i)));
+                pw.println(String.format("%s,%s,%.2f,%s,%s", allGradebookStudents.get(i),
+                        allQuizNames.get(i), allStudentScores.get(i), allCourseName.get(i), allSubmissionTimes.get(i)));
 
             }
 
@@ -155,6 +159,31 @@ public class GradeBook {
             return false;
 
         }
+
+    }
+
+    public static ArrayList<String> viewQuizSubmissions(String quizName) {
+
+        ArrayList<String> quizSubmissions = new ArrayList<>();
+
+        for(String names : allQuizNames) {
+
+            if (names.equalsIgnoreCase(quizName)) {
+
+                int num = allQuizNames.indexOf(names);
+
+                String submission = String.format("Student: %s\nScore: %.2f\nSubmitted at: %s\n",
+                        allGradebookStudents.get(num), allStudentScores.get(num), allSubmissionTimes.get(num));
+
+                quizSubmissions.add(submission);
+
+
+            }
+
+        }
+
+        return quizSubmissions;
+
 
     }
 

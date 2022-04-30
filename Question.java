@@ -84,18 +84,23 @@ public class Question {
     }
 
     //Alternative toString method for server specific formatting
-    public String stringify() {
+    public String stringify(String type) {
 
         StringBuilder sb = new StringBuilder();
+        sb.append("&");
         sb.append(typeToString());
         sb.append("&");
-        sb.append(question);
+        sb.append("Q)").append(question);
         sb.append("&");
-        for (String answer : answers) {
-            sb.append(answer);
+        for (int i = 0; i < answers.size(); i++) {
+            sb.append(i + 1).append(")").append(answers.get(i));
             sb.append("&");
         }
-        sb.append(correctAnswer);
+
+        if (type.equals("teacher")) {
+            sb.append("Correct Answer:").append(correctAnswer);
+            sb.append("&");
+        }
 
         return sb.toString();
     }

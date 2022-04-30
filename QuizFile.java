@@ -4,7 +4,8 @@ import java.util.ArrayList;
 public class QuizFile {
 
     private final String fileName;
-    private static ArrayList<Quiz> quizzes;
+    private ArrayList<Quiz> quizzes;
+    private ArrayList<String> allNames;
 
 
     //Constructor
@@ -12,8 +13,40 @@ public class QuizFile {
         this.fileName = fileName;
         this.quizzes = new ArrayList<>();
         readFile();
+        readNames();
     }
 
+    public ArrayList<String> getAllNames() {
+        return allNames;
+    }
+
+    private void readNames() {
+
+        allNames = new ArrayList<>();
+
+        for (Quiz temp : quizzes) {
+
+            allNames.add(temp.getName());
+        }
+    }
+
+    public ArrayList<String> getCourseQuizName(String courseName) {
+
+        ArrayList<String> names = new ArrayList<>();
+
+        for (Quiz temp : quizzes) {
+
+            if (temp.getCourse().equals(courseName)) {
+
+                names.add(temp.getName());
+
+            }
+
+        }
+
+        return names;
+
+    }
 
     //Getter and Setter
     public ArrayList<Quiz> getQuizzes() {
@@ -40,12 +73,14 @@ public class QuizFile {
 
             fw.write(sb.toString());
             fw.close();
+            readNames();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
     //Reads the Database and initializes quizzes to Arraylist
     public boolean readFile() throws Exception {
@@ -267,6 +302,7 @@ public class QuizFile {
         }
         return false;
     }
+
 
     //gets the specific quiz based on the name provided
     public Quiz getQuiz(String name) {

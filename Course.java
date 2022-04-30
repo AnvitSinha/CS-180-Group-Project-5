@@ -34,10 +34,6 @@ public class Course {
         this.courseQuizzes = file.getCourseQuizzes(courseName);
         this.numQuizzes = this.courseQuizzes.size();
 
-        allCourses.add(courseName);
-
-
-
     }   // Constructor
 
     public static boolean addCourse(String courseName) {
@@ -63,8 +59,8 @@ public class Course {
 
         }
 
-        allCourses.remove(courseName);
         totalQuizzes.remove(allCourses.indexOf(courseName));
+        allCourses.remove(courseName);
 
         return Course.updateCourseFile();
 
@@ -117,6 +113,7 @@ public class Course {
             return true;
 
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
 
