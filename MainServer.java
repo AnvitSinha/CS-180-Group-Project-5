@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -5,7 +6,7 @@ import java.util.Arrays;
 
 public class MainServer implements Runnable {
 
-    private static final Object GATEKEEPER = new Object();
+    private static final Object GATEKEEPER = new Object();  // used to synchronize all users
     private final Socket client;
 
     public MainServer(Socket client) {
@@ -23,12 +24,13 @@ public class MainServer implements Runnable {
             PrintWriter writer = new PrintWriter(client.getOutputStream(), true);
             String currentLine;
 
+            // Initialize all classes
             Account.initializeAccounts();
             Course.initializeCourses();
             GradeBook.initializeStudentGradebook();
             QuizFile q = new QuizFile("quiz_tester.txt");
 
-            while (true) {
+            while (true) {      // Server keeps running and is ready to accept the user's input
 
                 currentLine = reader.readLine();
 
@@ -286,6 +288,14 @@ public class MainServer implements Runnable {
 
                         }
 
+                        case "addQuizFile" -> {
+
+                            String quizFile = reader.readLine();
+
+                            writer.println(q.addQuizFile(quizFile));
+
+                        }
+
                         // Course options
                         case "addCourse" -> {
 
@@ -399,6 +409,16 @@ public class MainServer implements Runnable {
 
                         }
 
+                        case "quizAverage" -> {
+
+                            String quizName = reader.readLine();
+
+                            double average = GradeBook.calculateQuizAverage(quizName);
+
+                            writer.println(average);
+
+                        }
+
                     }
 
                 }
@@ -406,7 +426,8 @@ public class MainServer implements Runnable {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "An Error Occurred At Server!",
+                    "Server Error", JOptionPane.WARNING_MESSAGE);
         }
 
     }

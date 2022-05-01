@@ -50,7 +50,7 @@ public class Account {
         }
 
 
-    }
+    }   // Initialize from database
 
     public static void updateDatabaseFile() throws IOException {
 
@@ -69,7 +69,7 @@ public class Account {
 
         pw.close();
 
-    }
+    }   // Update database
 
     public static boolean isValidCredential(String username, String password) {
 
@@ -112,12 +112,6 @@ public class Account {
         pw.close();
 
         return true;
-
-    }
-
-    public static ArrayList<String> get() {
-
-        return allPasswords;
 
     }
 
@@ -173,7 +167,7 @@ public class Account {
         this.type = allTypes.get(accountNumber);
 
 
-    }
+    }   // Create account
 
     public Account(String firstName, String lastName, String username, String password, String type) throws IOException {
 
@@ -219,11 +213,11 @@ public class Account {
 
     public boolean updateUsername(String newUsername) throws IOException {
 
-        if (newUsername.equals(this.username)) {
+        if (newUsername.equals(this.username)) {    // Same username as current
 
             return false;
 
-        } else if (!isValidUsername(newUsername)) {
+        } else if (!isValidUsername(newUsername)) { // checks if username is valid
 
             return false;
 

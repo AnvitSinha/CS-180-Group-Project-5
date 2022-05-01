@@ -34,11 +34,11 @@ public class Course {
         this.courseQuizzes = file.getCourseQuizzes(courseName);
         this.numQuizzes = this.courseQuizzes.size();
 
-    }   // Constructor
+    }       // Constructor
 
     public static boolean addCourse(String courseName) {
 
-        if (allCourses.contains(courseName)) {
+        if (allCourses.contains(courseName)) {  // If course already exists
 
             return false;
 
@@ -133,31 +133,6 @@ public class Course {
                 this.courseName, (this.courseNumber + 1), this.numQuizzes);
     }
 
-    //attach a file
-    public String attachFile(String filename) throws IOException {
-        ArrayList<String> temp = new ArrayList<>();
-        File f = new File(filename);
-        FileReader fr = new FileReader(f);
-        BufferedReader bfr = new BufferedReader(fr);
-        String line;
 
-        while ((line = bfr.readLine()) != null) {
-            temp.add(line);
-        }
-
-        return temp.toString();
-    }
-
-    //randomize the order of questions
-    public ArrayList<Quiz> randomizeQuestion() {
-
-        ArrayList<Quiz> assigned = courseQuizzes;
-        Collections.shuffle(assigned);
-
-        return assigned;
-
-    }
-
-    //TODO Update course file to reflect quiz changes
 
 }

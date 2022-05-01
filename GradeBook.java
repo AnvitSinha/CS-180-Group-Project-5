@@ -1,15 +1,14 @@
 import java.io.*;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 public class GradeBook {
 
     private static final String studentGradebook = "GradeBook.txt";
-    public static ArrayList<String> allGradebookStudents = new ArrayList<>();   // Names of students in the gradebook
+    public static ArrayList<String> allGradebookStudents = new ArrayList<>();   // Names of students in the grade book
     public static ArrayList<String> allQuizNames = new ArrayList<>();           // Name for each quiz taken in order
     public static ArrayList<Double> allStudentScores = new ArrayList<>();       // Score for each quiz in order
     public static ArrayList<String> allCourseName = new ArrayList<>();          // Name of all associated courses
-    public static ArrayList<String> allSubmissionTimes = new ArrayList<>();  // All Submission times in order
+    public static ArrayList<String> allSubmissionTimes = new ArrayList<>();     // All Submission times in order
 
     public static void initializeStudentGradebook() throws IOException {
 
@@ -36,7 +35,7 @@ public class GradeBook {
         }
 
 
-    }
+    }   // Initialize from databse
 
     public static boolean updateStudentGradebook() {
 
@@ -58,24 +57,6 @@ public class GradeBook {
         }
 
     }
-
-    public static int calculateStanding(double score) {
-
-        int position = 1;
-
-        for (Double i : allStudentScores) {
-
-            if (score < i) {
-
-                position += 1;
-
-            }
-
-        }
-
-        return position;
-
-    }   // TODO
 
     public static double calculateCourseAverage(String courseName) {
 
@@ -162,6 +143,26 @@ public class GradeBook {
 
     }
 
+    public static double calculateQuizAverage(String quizName) {
+
+        double sum = 0;
+        int num = 0;
+
+        for (int i = 0; i < allQuizNames.size(); i++) {
+
+            if (allQuizNames.get(i).equals(quizName)) { // if quiz name is same as provided input
+
+                sum += allStudentScores.get(i);
+                num++;
+
+            }
+
+        }
+
+        return (sum / num);
+
+    }   // Find average Student score for quiz
+
     public static ArrayList<String> viewQuizSubmissions(String quizName) {
 
         ArrayList<String> quizSubmissions = new ArrayList<>();
@@ -172,6 +173,7 @@ public class GradeBook {
 
                 int num = allQuizNames.indexOf(names);
 
+                // Formats string to view
                 String submission = String.format("Student: %s\nScore: %.2f\nSubmitted at: %s\n",
                         allGradebookStudents.get(num), allStudentScores.get(num), allSubmissionTimes.get(num));
 
@@ -180,7 +182,7 @@ public class GradeBook {
 
             }
 
-        }
+        } //TODO
 
         return quizSubmissions;
 

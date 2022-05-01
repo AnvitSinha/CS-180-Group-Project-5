@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.net.*;
 
 public class MultiClientServer {
@@ -6,21 +7,22 @@ public class MultiClientServer {
 
         try {
 
-            ServerSocket server = new ServerSocket(5650);
-            server.setReuseAddress(true);
+            ServerSocket server = new ServerSocket(5650);   // create server socket at port 5650
+            server.setReuseAddress(true);                        // makes the port immediately available upon closing server
 
-            while (true) {
+            while (true) {  // server continuously waits for users to connect
 
-                Socket client = server.accept();
-                MainServer clientThread = new MainServer(client);
+                Socket client = server.accept();    // create a new socket for each user
+                MainServer clientThread = new MainServer(client);   // Create MainServer object for each user
 
-                new Thread(clientThread).start();
+                new Thread(clientThread).start();   // Create a new Thread for each user
 
             }
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "An Error Occurred At Server!",
+                    "Server Error", JOptionPane.WARNING_MESSAGE);
 
         }
 

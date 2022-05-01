@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -41,7 +42,7 @@ public class MainMenu {
 
     public static void main(String[] args) {
 
-        try (Socket socket = new Socket("localhost", 5650)) {
+        try (Socket socket = new Socket("localhost", 5650)) {   // connect to server
 
             PrintWriter send = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader get = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -52,6 +53,7 @@ public class MainMenu {
 
             do {
 
+                // Initialize databases
                 Account.initializeAccounts();
                 Course.initializeCourses();
                 GradeBook.initializeStudentGradebook();
@@ -159,7 +161,7 @@ public class MainMenu {
 
                                             Account.initializeAccounts();
 
-                                            send.println("accountDetails");
+                                            send.println("accountDetails"); //send request to server
                                             send.flush();
 
                                             send.println(thisAccount.getUsername());
@@ -167,6 +169,7 @@ public class MainMenu {
                                             send.println(thisAccount.getPassword());
                                             send.flush();
 
+                                            // Add to text area
                                             JTextArea details = new JTextArea("Account Details\n");
                                             details.append(get.readLine() + "\n");
                                             details.append(get.readLine() + "\n");
@@ -215,7 +218,7 @@ public class MainMenu {
 
                                                 if (click == JOptionPane.OK_OPTION) {
 
-                                                    send.println("updateAccount");
+                                                    send.println("updateAccount");  // send request to server
                                                     send.flush();
 
                                                     send.println(thisAccount.getUsername());
@@ -246,13 +249,13 @@ public class MainMenu {
 
                                                                 name = thisAccount.name;
 
-                                                            }
+                                                            }   // Change name
 
                                                             case 1 -> thisAccount = new Account(update.getText(),
-                                                                    thisAccount.getPassword());
+                                                                    thisAccount.getPassword()); // change username
 
                                                             case 2 -> thisAccount = new Account(thisAccount.getUsername(),
-                                                                    update.getText());
+                                                                    update.getText());  // Change password
 
 
                                                         }
@@ -292,7 +295,7 @@ public class MainMenu {
 
                                             if (confirmDelete == JOptionPane.OK_OPTION) {
 
-                                                send.println("deleteAccount");
+                                                send.println("deleteAccount");  // send request to server
                                                 send.flush();
 
                                                 send.println(thisAccount.getUsername());
@@ -328,11 +331,11 @@ public class MainMenu {
 
                                     }
 
-                                }
+                                }   // Account settings
 
                                 case 1 -> {
 
-                                    if ("teacher".equals(thisAccount.getType())) {
+                                    if ("teacher".equals(thisAccount.getType())) {  // Teacher's menu
 
                                         String[] teacherOptions = {"Select Course", "Add Course", "Delete Course", "Exit"};
 
@@ -355,7 +358,7 @@ public class MainMenu {
 
                                                 case "Select Course" -> {
 
-                                                    send.println("listCourses");
+                                                    send.println("listCourses");    // send request to server
                                                     send.flush();
 
                                                     int num = Integer.parseInt(get.readLine());
@@ -368,7 +371,7 @@ public class MainMenu {
 
                                                     }
 
-                                                    courses[courses.length - 1] = "Exit";
+                                                    courses[courses.length - 1] = "Exit";   // Add option to exit
 
 
                                                     String courseChoice;
@@ -387,7 +390,7 @@ public class MainMenu {
 
                                                         }
 
-                                                        if (!"Exit".equals(courseChoice)) {
+                                                        if (!"Exit".equals(courseChoice)) { // Enter block if user doesn't exit
 
                                                             String courseName = courseChoice.substring(
                                                                     courseChoice.indexOf(" ") + 1);
@@ -407,12 +410,13 @@ public class MainMenu {
 
                                                                 case 0 -> {
 
-                                                                    send.println("courseDetails");
+                                                                    send.println("courseDetails");  // send request to server
                                                                     send.flush();
 
                                                                     send.println(thisCourse.courseName);
                                                                     send.flush();
 
+                                                                    // Add all text to a text area
                                                                     JTextArea courseDetails = new JTextArea("Course Details:\n");
                                                                     courseDetails.append(get.readLine() + "\n");
                                                                     courseDetails.append(get.readLine() + "\n");
@@ -430,7 +434,7 @@ public class MainMenu {
 
                                                                 case 1 -> {
 
-                                                                    send.println("listQuizNames");
+                                                                    send.println("listQuizNames");  // send request to server
                                                                     send.println(thisCourse.courseName);
 
                                                                     int size = Integer.parseInt(get.readLine());
@@ -453,7 +457,7 @@ public class MainMenu {
 
                                                                         break;
 
-                                                                    }
+                                                                    }   // if no quiz is selected
 
                                                                     String[] quizChoices = {"View Quiz", "Add Question",
                                                                     "Remove Question", "Remove Quiz", "View Quiz Submissions"};
@@ -468,7 +472,7 @@ public class MainMenu {
 
                                                                         case "View Quiz" -> {
 
-                                                                            send.println("printQuiz");
+                                                                            send.println("printQuiz");  // send request to server
                                                                             send.flush();
 
                                                                             send.println(quizSelected);
@@ -479,7 +483,7 @@ public class MainMenu {
 
                                                                             String quiz = get.readLine();
 
-                                                                            quiz = quizFormatter(quiz);
+                                                                            quiz = quizFormatter(quiz); // use formatter method to format correctly
 
                                                                             JTextArea quizText = new JTextArea(quiz);
 
@@ -508,7 +512,7 @@ public class MainMenu {
 
                                                                                 break;
 
-                                                                            }
+                                                                            }   // if user exits out of dialog box
 
                                                                             JTextField question = new JTextField();
                                                                             Object[] inputQ = {"Question:", question};
@@ -529,7 +533,7 @@ public class MainMenu {
 
                                                                                 break;
 
-                                                                            }
+                                                                            }   // if no question is entered
 
                                                                             if (option1 == JOptionPane.OK_OPTION) {
 
@@ -560,10 +564,10 @@ public class MainMenu {
                                                                                                     String.format("%s: %s Add Question", name, quizSelected),
                                                                                                     JOptionPane.PLAIN_MESSAGE);
                                                                                             break;
-                                                                                        }
+                                                                                        }   // Show error if invalid number is entered
 
 
-                                                                                        for (int i = 0; i < numQ; i++) {
+                                                                                        for (int i = 0; i < numQ; i++) {    // repeat for number of times as choices
 
                                                                                             int option3 = JOptionPane.showConfirmDialog(
                                                                                                     null, inputC,
@@ -602,7 +606,7 @@ public class MainMenu {
 
                                                                                             break;
 
-                                                                                        }
+                                                                                        }   // If less choices are entered than initially specified number
 
                                                                                         int option3 = JOptionPane.showConfirmDialog(null, correct,
                                                                                                 String.format("%s: %s Add Question", name, quizSelected),
@@ -663,14 +667,12 @@ public class MainMenu {
 
                                                                                     }
 
-                                                                                    choices.append("True&False&");
+                                                                                    choices.append("True&False&");  // options are True and False
 
 
                                                                                 }
 
-
-
-                                                                                send.println("addQuestion");
+                                                                                send.println("addQuestion");    // send request to server
                                                                                 send.flush();
 
                                                                                 send.println(quizSelected);
@@ -702,7 +704,7 @@ public class MainMenu {
                                                                                     JOptionPane.showMessageDialog(null,
                                                                                             "Question Add Canceled",
                                                                                             String.format("%s: %s Add Question", name, quizSelected),
-                                                                                            JOptionPane.WARNING_MESSAGE);
+                                                                                            JOptionPane.WARNING_MESSAGE);   //error message
 
                                                                                 }
 
@@ -713,7 +715,7 @@ public class MainMenu {
                                                                                 JOptionPane.showMessageDialog(null,
                                                                                         "Question Add Canceled",
                                                                                         String.format("%s: %s Add Question", name, quizSelected),
-                                                                                        JOptionPane.WARNING_MESSAGE);
+                                                                                        JOptionPane.WARNING_MESSAGE);   //error message
 
                                                                             }
 
@@ -751,7 +753,7 @@ public class MainMenu {
 
                                                                                 }
 
-                                                                                send.println("deleteQuestion");
+                                                                                send.println("deleteQuestion"); // send request to server
                                                                                 send.flush();
 
                                                                                 send.println(quizSelected);
@@ -845,7 +847,7 @@ public class MainMenu {
                                                                                 viewSubs.append(get.readLine());
                                                                                 viewSubs.append("\n");
 
-                                                                            }
+                                                                            }   // get all submissions from server
 
                                                                             viewSubs.setLineWrap(true);
                                                                             viewSubs.setWrapStyleWord(true);
@@ -867,63 +869,146 @@ public class MainMenu {
 
                                                                 case 2 -> {
 
-                                                                    JTextField quizName = new JTextField();
-                                                                    Object[] add = {"Enter Quiz Name:", quizName};
+                                                                    String[] upload = {"Add Individual Quiz", "Add Quiz File"};
 
-                                                                    int option1 = JOptionPane.showConfirmDialog(null,
-                                                                            add, String.format("%s: %s Add Quiz", name, courseName),
-                                                                            JOptionPane.OK_CANCEL_OPTION);
+                                                                    int quizUpload = JOptionPane.showOptionDialog(
+                                                                            null,
+                                                                            "Please Select Your Choice:",
+                                                                            String.format("%s: %s Menu", name, type),
+                                                                            JOptionPane.OK_CANCEL_OPTION,
+                                                                            JOptionPane.QUESTION_MESSAGE, null,
+                                                                            upload, null);
 
-                                                                    if (option1 == JOptionPane.OK_OPTION) {
+                                                                    switch (quizUpload) {
 
-                                                                        if (quizName.getText().isBlank()) {
+                                                                        case 0 -> {
 
-                                                                            JOptionPane.showMessageDialog(null,
-                                                                                    "No Quiz Name Entered!\n" +
-                                                                                            "Quiz Add Canceled",
-                                                                                    String.format("%s: %s Add Quiz", name, courseName),
-                                                                                    JOptionPane.WARNING_MESSAGE);
+                                                                            JTextField quizName = new JTextField();
+                                                                            Object[] add = {"Enter Quiz Name:", quizName};
 
-                                                                            break;
+                                                                            int option1 = JOptionPane.showConfirmDialog(null,
+                                                                                    add, String.format("%s: %s Add Quiz", name, courseName),
+                                                                                    JOptionPane.OK_CANCEL_OPTION);
 
-                                                                        }
+                                                                            if (option1 == JOptionPane.OK_OPTION) {
 
-                                                                        send.println("addQuiz");
-                                                                        send.flush();
+                                                                                if (quizName.getText().isBlank()) {
 
-                                                                        send.println(courseName);
-                                                                        send.flush();
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "No Quiz Name Entered!\n" +
+                                                                                                    "Quiz Add Canceled",
+                                                                                            String.format("%s: %s Add Quiz", name, courseName),
+                                                                                            JOptionPane.WARNING_MESSAGE);
 
-                                                                        boolean added = Boolean.parseBoolean(get.readLine());
+                                                                                    break;
 
-                                                                        if (added) {
+                                                                                }
 
-                                                                            JOptionPane.showMessageDialog(null,
-                                                                                    "Quiz Added Successfully",
-                                                                                    String.format("%s: %s Add Quiz", name, courseName),
-                                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                                                send.println("addQuiz");    //send request to server
+                                                                                send.flush();
 
-                                                                        } else {
+                                                                                send.println(courseName);
+                                                                                send.flush();
 
-                                                                            JOptionPane.showMessageDialog(null,
-                                                                                    "Quiz Add Failed!",
-                                                                                    String.format("%s: %s Add Quiz", name, courseName),
-                                                                                    JOptionPane.WARNING_MESSAGE);
+                                                                                boolean added = Boolean.parseBoolean(get.readLine());
 
-                                                                        }
+                                                                                if (added) {
 
-                                                                    } else {
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Quiz Added Successfully",
+                                                                                            String.format("%s: %s Add Quiz", name, courseName),
+                                                                                            JOptionPane.INFORMATION_MESSAGE);
 
-                                                                        JOptionPane.showMessageDialog(null,
-                                                                                "Quiz Add Canceled",
-                                                                                String.format("%s: %s Add Quiz", name, courseName),
-                                                                                JOptionPane.WARNING_MESSAGE);
+                                                                                } else {
+
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Quiz Add Failed!",
+                                                                                            String.format("%s: %s Add Quiz", name, courseName),
+                                                                                            JOptionPane.WARNING_MESSAGE);   //error message
+
+                                                                                }
+
+                                                                            } else {
+
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        "Quiz Add Canceled",
+                                                                                        String.format("%s: %s Add Quiz", name, courseName),
+                                                                                        JOptionPane.WARNING_MESSAGE);   //error message
+
+                                                                            }
+
+                                                                        }   // Add just quiz
+
+                                                                        case 1 -> {
+
+                                                                            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                                                                            jfc.setDialogTitle("Select .txt File to Add Quiz:");
+
+                                                                            String fileToAdd;
+
+
+                                                                            int returnValue = jfc.showOpenDialog(null);
+
+                                                                            if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+                                                                                if (jfc.getSelectedFile().getAbsolutePath().split("\\.")[1].equals("txt")) {
+
+                                                                                    fileToAdd = jfc.getSelectedFile().getAbsolutePath();
+
+                                                                                } else {
+
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Invalid File Type!",
+                                                                                            String.format("%s: %s Add Quiz", name, courseName),
+                                                                                            JOptionPane.WARNING_MESSAGE);
+
+                                                                                    break;
+
+                                                                                }
+
+                                                                                send.println("addQuizFile");
+                                                                                send.flush();
+
+                                                                                send.println(fileToAdd);
+                                                                                send.flush();
+
+                                                                                boolean added = Boolean.parseBoolean(get.readLine());
+
+                                                                                if (added) {
+
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Quiz Added Successfully!",
+                                                                                            String.format("%s: %s Add Quiz", name, courseName),
+                                                                                            JOptionPane.INFORMATION_MESSAGE);
+
+
+                                                                                } else {
+
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "File Add Failed!",
+                                                                                            String.format("%s: %s Add Quiz", name, courseName),
+                                                                                            JOptionPane.WARNING_MESSAGE);
+
+
+                                                                                }
+
+                                                                            } else {
+
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        "File Add Failed!",
+                                                                                        String.format("%s: %s Add Quiz", name, courseName),
+                                                                                        JOptionPane.WARNING_MESSAGE);
+
+                                                                            }
+
+
+
+                                                                        }   // Add entire quiz file
 
                                                                     }
 
-                                                                }   // Add a quiz to the course
 
-                                                                //TODO Teacher file upload
+                                                                }   // Add a quiz to the course
 
 
                                                             }
@@ -932,7 +1017,7 @@ public class MainMenu {
 
 
 
-                                                    } while (!courseChoice.equals("Exit"));
+                                                    } while (!courseChoice.equals("Exit")); // Do nothing when user chooses to exit
 
                                                 }
 
@@ -960,7 +1045,7 @@ public class MainMenu {
 
                                                     if (entered == JOptionPane.OK_OPTION) {
 
-                                                        send.println("addCourse");
+                                                        send.println("addCourse");  // send request to server
                                                         send.flush();
 
                                                         send.println(courseName.getText());
@@ -982,7 +1067,7 @@ public class MainMenu {
                                                             JOptionPane.showMessageDialog(null,
                                                                     "Course Add Failed",
                                                                     String.format("%s: Add Course Menu", name),
-                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                                    JOptionPane.INFORMATION_MESSAGE);   // error message
 
                                                         }
 
@@ -991,11 +1076,11 @@ public class MainMenu {
                                                         JOptionPane.showMessageDialog(null,
                                                                 "Course Add Canceled",
                                                                 String.format("%s: Add Course Menu", name),
-                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                                JOptionPane.INFORMATION_MESSAGE);   // error message
 
                                                     }
 
-                                                }
+                                                }   // Add course
 
                                                 case "Delete Course" -> {
 
@@ -1013,16 +1098,16 @@ public class MainMenu {
                                                         JOptionPane.showMessageDialog(null,
                                                                 "Course Deletion Canceled\nNo Course Entered!",
                                                                 String.format("%s: Remove Course Menu", name),
-                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                                JOptionPane.INFORMATION_MESSAGE);   // error message
 
                                                     }
 
                                                     if (entered == JOptionPane.OK_OPTION) {
 
-                                                        send.println("deleteCourse");
+                                                        send.println("deleteCourse");   // semd request to server
                                                         send.flush();
 
-                                                        send.println(courseName.getText());
+                                                        send.println(courseName.getText()); // send course name to server
                                                         send.flush();
 
                                                         boolean removed = Boolean.parseBoolean(get.readLine());
@@ -1041,7 +1126,7 @@ public class MainMenu {
                                                             JOptionPane.showMessageDialog(null,
                                                                     "Course Deletion Failed",
                                                                     String.format("%s: Remove Course Menu", name),
-                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                                    JOptionPane.INFORMATION_MESSAGE);   // error message
 
                                                         }
 
@@ -1050,19 +1135,19 @@ public class MainMenu {
                                                         JOptionPane.showMessageDialog(null,
                                                                 "Course Delete Canceled",
                                                                 String.format("%s: Remove Course Menu", name),
-                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                                JOptionPane.INFORMATION_MESSAGE);   // error message
 
                                                     }
 
-                                                }
+                                                }   // Remove course from database
 
-                                                case "Exit" -> {}
+                                                case "Exit" -> {} // Do nothing when user chooses to exit
 
                                             }
 
-                                        } while (!"Exit".equals(teacherChoice));
+                                        } while (!"Exit".equals(teacherChoice));    // Do nothing when user chooses to exit
 
-                                    } else if ("student".equals(thisAccount.getType())) {
+                                    } else if ("student".equals(thisAccount.getType())) {   // Student's menu
 
                                         String[] studentOptions = {"Select Course", "View Your Overall Score", "Exit"};
 
@@ -1079,13 +1164,13 @@ public class MainMenu {
 
                                                 break;
 
-                                            }
+                                            }       // exit if user doesn't select an option
 
                                             switch (studentChoice) {
 
                                                 case "Select Course" -> {
 
-                                                    send.println("listCourses");
+                                                    send.println("listCourses");    // send request to server
                                                     send.flush();
 
                                                     int num = Integer.parseInt(get.readLine());
@@ -1096,9 +1181,9 @@ public class MainMenu {
 
                                                         courses[i] = get.readLine();
 
-                                                    }
+                                                    }   // get all course from server
 
-                                                    courses[courses.length - 1] = "Exit";
+                                                    courses[courses.length - 1] = "Exit";   // Add option to exit
 
                                                     String courseChoice;
 
@@ -1119,9 +1204,9 @@ public class MainMenu {
                                                         if (!"Exit".equals(courseChoice)) {
 
                                                             String courseName = courseChoice.substring(
-                                                                    courseChoice.indexOf(" ") + 1);
+                                                                    courseChoice.indexOf(" ") + 1); // remove course number
 
-                                                            Course thisCourse = new Course(courseName, q);
+                                                            Course thisCourse = new Course(courseName, q);  // create course work with
 
                                                             String[] courseMenuOptions = {"Course Details", "List Quizzes",
                                                                     "Your Course Grade", "Course Average"};
@@ -1156,7 +1241,7 @@ public class MainMenu {
                                                                             String.format("%s: %s Details", name, thisCourse.courseName),
                                                                             JOptionPane.INFORMATION_MESSAGE);
 
-                                                                }
+                                                                }   // Show course details
 
                                                                 case 1 -> {
 
@@ -1187,8 +1272,36 @@ public class MainMenu {
 
                                                                     String[] quizChoices = {"Attempt Quiz", "View Quiz Average"};
 
+                                                                    int quizC = JOptionPane.showOptionDialog(null,
+                                                                            "Please Select Your Choice",
+                                                                            String.format("%s: %s Menu", name, type),
+                                                                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                                                            null, quizChoices, null);
 
-                                                                } //TODO
+                                                                    switch (quizC) {
+
+                                                                        case 0 -> {
+
+
+
+                                                                        } //TODO
+
+                                                                        case 1 -> {
+
+                                                                            send.println(quizSelected);
+
+                                                                            double average = Double.parseDouble(get.readLine());
+
+                                                                            JOptionPane.showMessageDialog(null,
+                                                                                    String.format("%s Average: %.2f", quizSelected, average),
+                                                                                    String.format("%s: %s Grade", name, quizSelected),
+                                                                                    JOptionPane.INFORMATION_MESSAGE);
+                                                                        }   // Shows average grade for the quiz
+
+                                                                    }
+
+
+                                                                }   // List All Quizzes to choose from
 
                                                                 case 2 -> {
 
@@ -1211,7 +1324,7 @@ public class MainMenu {
                                                                             String.format("%s: Course Grade", name),
                                                                             JOptionPane.INFORMATION_MESSAGE);
 
-                                                                }
+                                                                }   // Show grade in the course
 
                                                                 case 3 -> {
 
@@ -1231,15 +1344,15 @@ public class MainMenu {
                                                                             String.format("%s: Course Grade", name),
                                                                             JOptionPane.INFORMATION_MESSAGE);
 
-                                                                }
+                                                                }   // Show overall average of the course
 
                                                             }
                                                         }
 
-                                                    } while (!courseChoice.equals("Exit"));
+                                                    } while (!courseChoice.equals("Exit")); // repeat until user exits
 
 
-                                                }
+                                                }   // select course to work with
 
                                                 case "View Your Overall Score" -> {
 
@@ -1252,28 +1365,27 @@ public class MainMenu {
                                                             String.format("%s: Overall Score", name),
                                                             JOptionPane.INFORMATION_MESSAGE);
 
-                                                }
+                                                }   // Show overall score from all quizzes
 
-                                                case "Exit" -> {
-                                                }
+                                                case "Exit" -> {}   // Do nothing when user chooses to exit
 
                                             }
 
 
-                                        } while (!"Exit".equals(studentChoice));
+                                        } while (!"Exit".equals(studentChoice));    // Repeat menu until student exits
 
                                     }
 
-                                }
+                                }   // Courses
 
-                                case 2 -> {}
+                                case 2 -> {}    // Do nothing when user chooses to exit
 
-                                default -> mainOption = 2;
+                                default -> mainOption = 2;  // If no option selected
 
 
                             }
 
-                        } while (systemOption != 2);
+                        } while (systemOption != 2);    // repeat until user quits
 
                     }
 
@@ -1361,8 +1473,7 @@ public class MainMenu {
 
                     } // create a new account
 
-                    case 2 -> {
-                    }
+                    case 2 -> {}    // Do nothing when user chooses to exit
 
                     default -> mainOption = 2;
 
@@ -1375,7 +1486,8 @@ public class MainMenu {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "An Error Occurred While Connecting to Server!",
+                    "Server Error", JOptionPane.WARNING_MESSAGE);
 
         }
 

@@ -128,6 +128,52 @@ public class QuizFile {
         return true;
     }
 
+    public boolean addQuizFile(String fileToAdd) throws Exception{
+
+        File f = new File(fileToAdd);
+
+        if (!f.exists()) {
+            return false;
+        }
+
+        BufferedReader br = new BufferedReader(new FileReader(f));
+
+        ArrayList<String> temp = new ArrayList<>();
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            temp.add(line);
+        }
+        br.close();
+
+        while (temp.size() > 1) {
+
+            if (temp.get(0).equals("lineQuizSeparator")) {
+
+                temp.remove(0);
+
+                String course = temp.remove(0);
+                String name = temp.remove(0);
+
+                ArrayList<String> empty = new ArrayList<>();
+
+                while (!temp.get(0).equals("lineQuizSeparator")) {
+
+                    empty.add(temp.remove(0));
+                }
+                ArrayList<Question> questions = questionReader(empty);
+
+                quizzes.add(new Quiz(course, name, questions));
+            }
+        }
+
+        writeFile();
+
+        return true;
+
+
+    }
+
     //Helper Method for readFile method
     public ArrayList<Question> questionReader(ArrayList<String> input) {
 
@@ -175,6 +221,11 @@ public class QuizFile {
         Quiz q = new Quiz(course, name, new ArrayList<>());
         quizzes.add(q);
 
+        int courseNum = Course.allCourses.indexOf(course);
+
+        Course.totalQuizzes.set(courseNum, Course.totalQuizzes.get(courseNum) + 1);
+        Course.updateCourseFile();
+
         writeFile();
 
         return true;
@@ -211,7 +262,13 @@ public class QuizFile {
         for (Quiz checker : quizzes) {
             if (checker.getName().equals(name)) {
 
+                int courseNum = Course.allCourses.indexOf(checker.getCourse());
+
                 quizzes.remove(checker);
+
+
+                Course.totalQuizzes.set(courseNum, Course.totalQuizzes.get(courseNum) - 1);
+                Course.updateCourseFile();
 
                 writeFile();
 

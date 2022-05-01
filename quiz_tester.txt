@@ -8,7 +8,7 @@ True
 False
 True
 questionSeparator
-What is 45 degrees in radians?
+TF
 pi
 pi/45
 pi/2
@@ -230,7 +230,7 @@ True
 False
 False
 questionSeparator
-quizLineSeparator
+TF
 CS180
 Selection Quiz
 questionSeparator
