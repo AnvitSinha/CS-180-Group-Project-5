@@ -120,7 +120,39 @@ Steps:
 5. User selects the password textbox
 6. User enters "gwuproj4" via keyboard
 7. User selects the OK button
-8. 
+8. User selects the courses button
+9. User selects the select course option from the dropdown menu
+10. User selects the OK button 
+11. User selects the CS180 course from the dropdown menu
+12. User selects the OK button
+13. User selects the list quizes button
+14. User selects the data types quiz from the dropdown menu
+15. User selects the OK button
+16. User selects the Attempt quiz button
+17. User selects the OK button
+18. User selects a file to upload for the answeers for the quiz
 
+Expected Result - the application should show the following menus in order- the main menu with the login button, the succesful login message, the student main menu, the select course menu, the student course menu, the quiz dropdown menu, the quiz, and finally the file upload for the answers. 
+
+Test Status - Passed 
+
+Test 7: Student log in to see Grade 
+
+Steps:
+1. User starts the MultiClientServer and MainMenu
+2. User selects the login Button
+3. User selects the username textbox
+4. User enters "georgewu" via keyboard
+5. User selects the password textbox
+6. User enters "gwuproj4" via keyboard
+7. User selects the OK button
+8. User selects the courses button
+9. User selects the select course option from the dropdown menu
+11. User hits the OK button
+12. User selects the your course grade button
+
+Expected result- The application should show the grade of the course based on the course and the quiz grade. Both of those can be found the gradebook.txt file. 
+
+Test Status - Passed
 
 
