@@ -37,7 +37,7 @@ Steps:
 
 Epexted Result- Application shows a succesfull creation message for the account after creating the account, then after using those credentials, the application should the main menu option for that account. 
 
-Test Status- Failed
+Test Status- Passed
 
 Test 3: Test Teacher login with changing account details
 
@@ -98,8 +98,29 @@ Steps:
 6. User enters "proj4kdarabhy" via keyboard
 7. User selects the OK button
 8. User selects the courses button 
-9. User selects the CS180 option from the dropdown
+9. User selects the select course option from the dropdown 
 10. User selects the OK button
+11. User selects the CS180 option from the dropdown
+12. User selects the OK button
+13. User selects the add quiz button 
+14. User selects the add quiz file button
+15. User selects a .txt for a quiz file in our specific format
+
+Expected result- the application should show the following menus in order- the main menu with the login button, the succesful login message, the teacher main menu, the select course menu, add quiz file. The program should also pop up a local file loader for the computer. After you select the file, you should see a file quiz added sucess message. 
+
+Test Status - Passed
+
+Test 6: Student logging in to upload a file asnwer to a quiz 
+
+Steps:
+1. User starts the MultiClientServer and MainMenu
+2. User selects the login Button
+3. User selects the username textbox
+4. User enters "georgewu" via keyboard
+5. User selects the password textbox
+6. User enters "gwuproj4" via keyboard
+7. User selects the OK button
+8. 
 
 
 
