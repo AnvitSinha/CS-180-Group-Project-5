@@ -3,29 +3,94 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Project 4 - Account
+ * Project 5 - Account
  * <p>
  * Class that manages all user accounts by storing them into a database and reading from the database when needed.
  * The class also includes helper methods that help update the database whenever the use wants to change their
  * credentials, or a new account is added.
  *
  * @author Group 66, L16
- * @version April 11, 2022
+ * @version May 2, 2022
  */
 
 public class Account {
 
+    private static final String accountsFile = "accounts.txt";
     private static ArrayList<String> allUsernames = new ArrayList<>();
     private static ArrayList<String> allPasswords = new ArrayList<>();
     private static ArrayList<String> allTypes = new ArrayList<>();
     private static ArrayList<String> allNames = new ArrayList<>();
-    private static final String accountsFile = "accounts.txt";
-
+    public String name;
     private String username;
     private String password;
-    public String name;
     private String type;
     private int accountNumber;
+
+    public Account(Scanner scanner, String type) {
+
+        System.out.println("Enter User's Full Name: ");
+        String fullName = scanner.nextLine();
+
+        String username;
+
+        do {
+
+            System.out.println("Enter a Username:");
+            username = scanner.nextLine();
+
+            if (!isValidUsername(username)) {
+                System.out.println("Username is already taken!");
+            }   // Invalid username message
+
+        } while (!isValidUsername(username));  // Username not valid check
+
+        System.out.println("Set Password: ");
+        String password = scanner.nextLine();
+
+        this.username = username;
+        allUsernames.add(username);
+        this.password = password;
+        allPasswords.add(password);
+        this.name = fullName;
+        allNames.add(fullName);
+        this.type = type;
+        allTypes.add(type);
+        this.accountNumber = allUsernames.indexOf(username);
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, true))) {
+
+            pw.println(this);
+
+        } catch (IOException e) {
+            System.out.println("An Error Occurred!");
+        }
+
+
+    }   // Get user's login info and add account to database
+
+    public Account(String username, String password) {
+
+        this.accountNumber = allUsernames.indexOf(username);
+        this.username = allUsernames.get(accountNumber);
+        this.password = allPasswords.get(accountNumber);
+        this.name = allNames.get(accountNumber);
+        this.type = allTypes.get(accountNumber);
+
+
+    }   // Create account
+
+    public Account(String firstName, String lastName, String username, String password, String type) throws IOException {
+
+        this.username = username;
+        allUsernames.add(username);
+        this.password = password;
+        allPasswords.add(password);
+        this.name = firstName + " " + lastName;
+        this.type = type;
+
+        Account.updateDatabaseFile();
+
+    }
 
     public static void initializeAccounts() throws IOException {
 
@@ -38,7 +103,7 @@ public class Account {
 
         String line;
 
-        while((line = bfr.readLine()) != null) {
+        while ((line = bfr.readLine()) != null) {
 
             String[] splitWords = line.split(",");
 
@@ -112,73 +177,6 @@ public class Account {
         pw.close();
 
         return true;
-
-    }
-
-    public Account(Scanner scanner, String type) {
-
-        System.out.println("Enter User's Full Name: ");
-        String fullName = scanner.nextLine();
-
-        String username;
-
-        do {
-
-            System.out.println("Enter a Username:");
-            username = scanner.nextLine();
-
-            if(!isValidUsername(username)) {
-                System.out.println("Username is already taken!");
-            }   // Invalid username message
-
-        } while(!isValidUsername(username));  // Username not valid check
-
-        System.out.println("Set Password: ");
-        String password = scanner.nextLine();
-
-        this.username = username;
-        allUsernames.add(username);
-        this.password = password;
-        allPasswords.add(password);
-        this.name = fullName;
-        allNames.add(fullName);
-        this.type = type;
-        allTypes.add(type);
-        this.accountNumber = allUsernames.indexOf(username);
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(accountsFile, true))) {
-
-            pw.println(this.toString());
-
-        } catch (IOException e) {
-            System.out.println("An Error Occurred!");
-        }
-
-
-
-    }   // Get user's login info and add account to database
-
-    public Account(String username, String password) {
-
-        this.accountNumber = allUsernames.indexOf(username);
-        this.username = allUsernames.get(accountNumber);
-        this.password = allPasswords.get(accountNumber);
-        this.name = allNames.get(accountNumber);
-        this.type = allTypes.get(accountNumber);
-
-
-    }   // Create account
-
-    public Account(String firstName, String lastName, String username, String password, String type) throws IOException {
-
-        this.username = username;
-        allUsernames.add(username);
-        this.password = password;
-        allPasswords.add(password);
-        this.name = firstName + " " + lastName;
-        this.type = type;
-
-        Account.updateDatabaseFile();
 
     }
 
@@ -270,8 +268,8 @@ public class Account {
         int first = this.password.length();         // length of password
         int second = this.username.length();        // length of username
         int third = this.name.length();             // length of name
-        int fourth = this.password.charAt(first/2); // integer representation of middle character of password
-        int fifth = this.username.charAt(second/2); // integer representation of middle character of username
+        int fourth = this.password.charAt(first / 2); // integer representation of middle character of password
+        int fifth = this.username.charAt(second / 2); // integer representation of middle character of username
 
         return (first + second + third + fourth + fifth);
 
@@ -289,7 +287,7 @@ public class Account {
     public String toString() {
 
         return String.format("Name: %s\nUsername: %s\nAssociated Type: %s\nAccount Number: %s",
-        this.name, this.username, this.type, this.accountNumber);
+                this.name, this.username, this.type, this.accountNumber);
     }
 
 }

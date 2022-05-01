@@ -1,30 +1,25 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Project 5 - Course
  * <p>
  * Class that manages all courses by storing them into a database and reading from the database when needed.
- * The class also includes helper methods that help in adding courses, initializing courses, and also holds the
- * grade book for the students.
- * Teh grade book hold the name, number of attempted quizzes, and average score for that student.
+ * The class also includes helper methods that help in adding, deleting, listing or editing courses.
  *
  * @author Group 66, L16
- * @version April 11, 2022
+ * @version May 2, 2022
  */
 
 public class Course {
 
+    private static final String coursesFile = "courses.txt";
+    public static ArrayList<String> allCourses = new ArrayList<>();
+    public static ArrayList<Integer> totalQuizzes = new ArrayList<>();   // total quizzes for each course
     public String courseName;   // Name
     public int numQuizzes;      // Number of Quizzes that the course has
     public int courseNumber;    // Index of the course in the arraylist
     public ArrayList<Quiz> courseQuizzes;  // Quizzes for this course
-
-    public static ArrayList<String> allCourses = new ArrayList<>();
-    public static ArrayList<Integer> totalQuizzes = new ArrayList<>();   // total quizzes for each course
-
-    private static final String coursesFile = "courses.txt";
 
 
     public Course(String courseName, QuizFile file) {
@@ -81,7 +76,7 @@ public class Course {
 
         String line;
 
-        while((line = bfr.readLine()) != null) {
+        while ((line = bfr.readLine()) != null) {
 
             String[] splitWords = line.split(",");
 
@@ -92,12 +87,6 @@ public class Course {
         }
 
     }       // Initialize arraylists from database
-
-    public int getNumQuizzes() {
-
-        return this.numQuizzes;
-
-    }          // returns total quizzes in this course
 
     public static boolean updateCourseFile() {
 
@@ -119,6 +108,12 @@ public class Course {
 
     }       // Update course file with new course details
 
+    public int getNumQuizzes() {
+
+        return this.numQuizzes;
+
+    }          // returns total quizzes in this course
+
     public String getCourseName() {
         return courseName;
     }
@@ -132,7 +127,6 @@ public class Course {
         return String.format("Course Name: %s\nCourse Number: %d\nTotal Quizzes: %d",
                 this.courseName, (this.courseNumber + 1), this.numQuizzes);
     }
-
 
 
 }

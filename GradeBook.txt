@@ -1,5 +1,5 @@
-Anvit Sinha,Antiderivate Quiz,100.00,MA161,2022/04/28;12:30:11
-Alec Schmidt,Trig Quiz,75.00,MA161,2022/04/25;08:33:10
-George Wu,Selection Quiz,33.33,CS180,2022/04/29;15:29:01
-Allan Wang,Trig Quiz,50.00,MA161,2022/04/28;13:01:56
-Teimko Chichindaze,Selection Quiz,100.00,CS180,2022/05/01;07:58:02
+Anvit Sinha,Antiderivate Quiz,100.00,MA161,2022/04/28 12:30:11
+Alec Schmidt,Trig Quiz,75.00,MA161,2022/04/25 08:33:10
+George Wu,Selection Quiz,33.33,CS180,2022/04/29 15:29:01
+Allan Wang,Trig Quiz,50.00,MA161,2022/04/28 13:01:56
+Teimko Chichindaze,Selection Quiz,100.00,CS180,2022/05/01 07:58:02

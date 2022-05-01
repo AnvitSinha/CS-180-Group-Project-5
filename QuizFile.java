@@ -1,5 +1,17 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+/**
+ * Project 5 - QuizFile
+ * <p>
+ * Handles all requests for dealing with quizzes by using relevant methods and helper methods. All reading and writing
+ * to databse file is done here.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
 
 public class QuizFile {
 
@@ -85,6 +97,8 @@ public class QuizFile {
     //Reads the Database and initializes quizzes to Arraylist
     public boolean readFile() throws Exception {
 
+        this.quizzes = new ArrayList<>();
+
         File f = new File(fileName);
 
         if (!f.exists()) {
@@ -128,7 +142,8 @@ public class QuizFile {
         return true;
     }
 
-    public boolean addQuizFile(String fileToAdd) throws Exception{
+    // Adds quiz file from teacher to database
+    public boolean addQuizFile(String fileToAdd) throws Exception {
 
         File f = new File(fileToAdd);
 
@@ -146,6 +161,8 @@ public class QuizFile {
         }
         br.close();
 
+        int courseNum;
+
         while (temp.size() > 1) {
 
             if (temp.get(0).equals("lineQuizSeparator")) {
@@ -154,6 +171,8 @@ public class QuizFile {
 
                 String course = temp.remove(0);
                 String name = temp.remove(0);
+
+                courseNum = Course.allCourses.indexOf(course);
 
                 ArrayList<String> empty = new ArrayList<>();
 
@@ -164,8 +183,14 @@ public class QuizFile {
                 ArrayList<Question> questions = questionReader(empty);
 
                 quizzes.add(new Quiz(course, name, questions));
+
+                Course.totalQuizzes.set(courseNum, Course.totalQuizzes.get(courseNum) + 1);
+
+
             }
         }
+
+        Course.updateCourseFile();
 
         writeFile();
 
@@ -297,6 +322,98 @@ public class QuizFile {
         return false;
     }
 
+    //Gets the answers for the quiz questions
+    public ArrayList<String> getQuizAnswers(String quizName, ArrayList<String> questionNames) {
+
+        Quiz check = getQuiz(quizName);
+        String[] answer = new String[questionNames.size()];
+
+        for (Question question : check.getQuestions()) {
+
+            if (questionNames.contains(question.getQuestion())) {
+
+                // Put correct answer at the same index as its question in the input ArrayList
+                answer[questionNames.indexOf(question.getQuestion())] = question.getCorrectAnswer();
+
+            }
+
+        }
+
+        return new ArrayList<>(Arrays.asList(answer));
+
+    }
+
+    //Gets the number of questions answered correctly by the student given a .txt file
+    public int numCorrectAns(String filename) throws IOException {
+
+        int numCorrect = 0;
+
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+
+        String quizName = br.readLine();
+        ArrayList<String> questionsGiven = new ArrayList<>();
+        ArrayList<String> answersGiven = new ArrayList<>();
+
+        String line;
+
+        while ((line = br.readLine()) != null) {    // Add all questions and answers to the respective AL
+
+            questionsGiven.add(line);
+            answersGiven.add(br.readLine());
+
+        }
+
+        ArrayList<String> correctAns = getQuizAnswers(quizName, questionsGiven);
+
+        for (int i = 0; i < answersGiven.size(); i++) {
+
+            if (answersGiven.get(i).equalsIgnoreCase(correctAns.get(i))) {
+
+                numCorrect++;
+
+            }
+
+        }
+
+        return numCorrect;
+
+
+    }
+
+    //Randomize questions ans answer choices
+    public Quiz randomizeQuestions(String quizName) {
+
+        Quiz temp = getQuiz(quizName);
+
+        ArrayList<Question> tempRandom = temp.getQuestions();
+        Collections.shuffle(tempRandom);    // Shuffle the questions
+
+        ArrayList<Question> randomized = new ArrayList<>();
+
+        for (Question check : tempRandom) {
+
+            Collections.shuffle(check.getAnswers());    //Shuffle options
+
+        }
+
+        if (tempRandom.size() < 5) {    // if there are less than 5 questions
+
+            randomized = tempRandom;
+
+            return new Quiz(temp.getCourse(), quizName, randomized);
+
+        }
+
+        for (int i = 0; i < 5; i++) {   // first 5 questions of the randomized list
+
+            randomized.add(tempRandom.get(i));
+
+        }
+
+        return new Quiz(temp.getCourse(), quizName, randomized);
+
+    }
+
     //Edits the name of the Quiz
     public boolean editQuizName(String name, String newName) {
 
@@ -365,7 +482,7 @@ public class QuizFile {
     public Quiz getQuiz(String name) {
 
         for (Quiz checker : quizzes) {
-            if (checker.getName().equals(name)) {
+            if (checker.getName().equalsIgnoreCase(name)) {
 
                 return checker;
 
@@ -411,7 +528,6 @@ public class QuizFile {
             }
         }
     }
-
 
 
     //Debugging Method

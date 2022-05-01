@@ -1,8 +1,21 @@
 import javax.swing.*;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+/**
+ * Project 5 - MainServer
+ * <p>
+ * Handles all requests from the user by invoking the relevant methods in their respective classes. This class runs
+ * using a while (true) loop, which keeps it running until it is closed manually. This class also has all the methods
+ * surrounded by synchronized blocks to make all threads work concurrently.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
 
 public class MainServer implements Runnable {
 
@@ -28,7 +41,7 @@ public class MainServer implements Runnable {
             Account.initializeAccounts();
             Course.initializeCourses();
             GradeBook.initializeStudentGradebook();
-            QuizFile q = new QuizFile("quiz_tester.txt");
+            QuizFile q = new QuizFile("quizDatabase.txt");
 
             while (true) {      // Server keeps running and is ready to accept the user's input
 
@@ -142,19 +155,22 @@ public class MainServer implements Runnable {
 
                         case "accountDetails" -> {
 
-                            String username = reader.readLine();
-                            String password = reader.readLine();
+                            synchronized (GATEKEEPER) {
+                                String username = reader.readLine();
+                                String password = reader.readLine();
 
-                            Account temp = new Account(username, password);
+                                Account temp = new Account(username, password);
 
-                            writer.println(temp.toString());
-                            writer.flush();
+                                writer.println(temp);
+                                writer.flush();
+                            }
 
                         }
 
                         // Quiz Options
                         case "printQuiz" -> {
                             synchronized (GATEKEEPER) {
+                                q.readFile();
                                 String quizName = reader.readLine();
                                 String type = reader.readLine();
                                 Quiz myQuiz = q.getQuiz(quizName);
@@ -237,6 +253,9 @@ public class MainServer implements Runnable {
                         case "editQuestion" -> {
 
                             synchronized (GATEKEEPER) {
+
+                                q.readFile();
+
                                 String quizName = reader.readLine();
                                 int questionNumber = Integer.parseInt(reader.readLine());
                                 int type = Integer.parseInt(reader.readLine());
@@ -254,6 +273,8 @@ public class MainServer implements Runnable {
 
                         case "getCourseQuizzes" -> {
                             synchronized (GATEKEEPER) {
+
+                                q.readFile();
 
                                 String courseName = reader.readLine();
                                 String type = reader.readLine();
@@ -275,24 +296,57 @@ public class MainServer implements Runnable {
 
                         case "listQuizNames" -> {
 
-                            String courseName = reader.readLine();
-                            ArrayList<String> myQuizName = q.getCourseQuizName(courseName);
+                            synchronized (GATEKEEPER) {
+                                q.readFile();
 
-                            writer.println(myQuizName.size());
+                                String courseName = reader.readLine();
+                                ArrayList<String> myQuizName = q.getCourseQuizName(courseName);
 
-                            for (String s : myQuizName) {
+                                writer.println(myQuizName.size());
 
-                                writer.println(s);
+                                for (String s : myQuizName) {
 
+                                    writer.println(s);
+
+                                }
                             }
 
                         }
 
                         case "addQuizFile" -> {
 
-                            String quizFile = reader.readLine();
+                            synchronized (GATEKEEPER) {
+                                String quizFile = reader.readLine();
 
-                            writer.println(q.addQuizFile(quizFile));
+                                writer.println(q.addQuizFile(quizFile));
+                            }
+
+
+                        }
+
+                        case "randomizeQuiz" -> {
+
+                            synchronized (GATEKEEPER) {
+                                q.readFile();
+                                String quizName = reader.readLine();
+                                String type = reader.readLine();
+                                Quiz myQuiz = q.randomizeQuestions(quizName);
+                                writer.write(myQuiz.stringify(type));
+                                writer.println();
+                                writer.flush();
+                                writer.println(myQuiz.getQuestions().size());
+                                writer.flush();
+                            }
+
+                        }
+
+                        case "correctAns" -> {
+
+                            synchronized (GATEKEEPER) {
+                                String file = reader.readLine();
+                                int correct = q.numCorrectAns(file);
+                                writer.println(correct);
+                            }
 
                         }
 
@@ -321,7 +375,7 @@ public class MainServer implements Runnable {
 
                                 for (int i = 0; i < allCourses.size(); i++) {
 
-                                    writer.println(String.format("Course%d: %s",(i+1), allCourses.get(i)));
+                                    writer.println(String.format("Course%d: %s", (i + 1), allCourses.get(i)));
                                     writer.flush();
 
                                 }
@@ -344,12 +398,14 @@ public class MainServer implements Runnable {
 
                         case "courseDetails" -> {
 
-                            String courseName = reader.readLine();
+                            synchronized (GATEKEEPER) {
+                                String courseName = reader.readLine();
 
-                            Course temp = new Course(courseName, q);
+                                Course temp = new Course(courseName, q);
 
-                            writer.println(temp.toString());
-                            writer.flush();
+                                writer.println(temp);
+                                writer.flush();
+                            }
 
                         }
 
@@ -396,26 +452,46 @@ public class MainServer implements Runnable {
 
                         case "quizSubmissions" -> {
 
-                            String quiz =  reader.readLine();
-                            ArrayList<String> submissions = GradeBook.viewQuizSubmissions(quiz);
+                            synchronized (GATEKEEPER) {
+                                String quiz = reader.readLine();
+                                ArrayList<String> submissions = GradeBook.viewQuizSubmissions(quiz);
 
-                            writer.println(submissions.size());
+                                writer.println(submissions.size());
+                                writer.flush();
 
-                            for (String submission : submissions) {
+                                for (String submission : submissions) {
 
-                                writer.println(submission);
+                                    writer.write(submission);
+                                    writer.println();
+                                    writer.flush();
 
+                                }
                             }
 
                         }
 
                         case "quizAverage" -> {
 
-                            String quizName = reader.readLine();
+                            synchronized (GATEKEEPER) {
+                                String quizName = reader.readLine();
 
-                            double average = GradeBook.calculateQuizAverage(quizName);
+                                double average = GradeBook.calculateQuizAverage(quizName);
 
-                            writer.println(average);
+                                writer.println(average);
+                            }
+
+                        }
+
+                        case "addSubmission" -> {
+
+                            synchronized (GATEKEEPER) {
+                                String name = reader.readLine();
+                                String quiz = reader.readLine();
+                                double score = Double.parseDouble(reader.readLine());
+                                String course = reader.readLine();
+
+                                writer.println(GradeBook.addNewSubmission(name, quiz, score, course));
+                            }
 
                         }
 

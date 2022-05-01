@@ -8,6 +8,17 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Project 5 - Main Menu
+ * <p>
+ * This class is the interface between the server and the users. This class connects to the server on the port 5650
+ * and sends any request from the user to the server. The class then receives the response from the server and uses that
+ * to display relevant GUIs to the users. All user interactions and messages to the users are done through GUIs.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
+
 public class MainMenu {
 
     private static String quizFormatter(String input) {
@@ -22,21 +33,6 @@ public class MainMenu {
             sb.append(s);
             sb.append("\n");
         }
-        return sb.toString();
-    }
-
-    //Formats specific server output
-    private static String answersFormatter(ArrayList<String> input) {
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < input.size() - 1; i++) {
-
-            sb.append(input.get(i));
-            sb.append("&");
-        }
-        sb.append(input.get(input.size() - 1));
-
         return sb.toString();
     }
 
@@ -57,13 +53,13 @@ public class MainMenu {
                 Account.initializeAccounts();
                 Course.initializeCourses();
                 GradeBook.initializeStudentGradebook();
-                QuizFile q = new QuizFile("quiz_tester.txt");
+                QuizFile q = new QuizFile("quizDatabase.txt");
 
                 String[] mainMenuOptions = {"Log In", "Sign Up", "Exit"};
 
                 mainOption = JOptionPane.showOptionDialog(null, "Main Menu:",
                         "Learning Management System", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                        null, mainMenuOptions, mainMenuOptions[0]);
+                        null, mainMenuOptions, null);
 
                 switch (mainOption) {
 
@@ -344,7 +340,7 @@ public class MainMenu {
                                         do {
 
                                             teacherChoice = (String) JOptionPane.showInputDialog(null,
-                                                    "Select Option", String.format("%s: Teacher Menu", name),
+                                                    "Select Option", String.format("%s: Teacher Course Menu", name),
                                                     JOptionPane.PLAIN_MESSAGE, null, teacherOptions,
                                                     null);
 
@@ -460,7 +456,7 @@ public class MainMenu {
                                                                     }   // if no quiz is selected
 
                                                                     String[] quizChoices = {"View Quiz", "Add Question",
-                                                                    "Remove Question", "Remove Quiz", "View Quiz Submissions"};
+                                                                            "Remove Question", "Remove Quiz", "View Quiz Submissions"};
 
                                                                     String quizChoice = (String) JOptionPane.showInputDialog(
                                                                             null, "Select Action:",
@@ -488,6 +484,7 @@ public class MainMenu {
                                                                             JTextArea quizText = new JTextArea(quiz);
 
                                                                             JScrollPane scrollQuiz = new JScrollPane(quizText);
+                                                                            quizText.setEditable(false);
                                                                             quizText.setLineWrap(true);
                                                                             quizText.setWrapStyleWord(true);
                                                                             scrollQuiz.setPreferredSize(new Dimension(250, 250));
@@ -709,7 +706,6 @@ public class MainMenu {
                                                                                 }
 
 
-
                                                                             } else {
 
                                                                                 JOptionPane.showMessageDialog(null,
@@ -718,8 +714,6 @@ public class MainMenu {
                                                                                         JOptionPane.WARNING_MESSAGE);   //error message
 
                                                                             }
-
-
 
 
                                                                         }    // Add a question to the quiz
@@ -839,18 +833,25 @@ public class MainMenu {
                                                                             send.flush();
 
                                                                             int subs = Integer.parseInt(get.readLine());
+                                                                            System.out.println(subs);
 
-                                                                            JTextArea viewSubs = new JTextArea("Quiz Submissions\n");
+                                                                            JTextArea viewSubs = new JTextArea("Quiz Submissions\n\n");
 
                                                                             for (int i = 0; i < subs; i++) {
 
                                                                                 viewSubs.append(get.readLine());
+                                                                                viewSubs.append("\n");
+                                                                                viewSubs.append(get.readLine());
+                                                                                viewSubs.append("\n");
+                                                                                viewSubs.append(get.readLine());
+                                                                                viewSubs.append("\n");
                                                                                 viewSubs.append("\n");
 
                                                                             }   // get all submissions from server
 
                                                                             viewSubs.setLineWrap(true);
                                                                             viewSubs.setWrapStyleWord(true);
+                                                                            viewSubs.setEditable(false);
                                                                             JScrollPane scrollSubs = new JScrollPane(viewSubs);
 
                                                                             scrollSubs.setPreferredSize(new Dimension(250, 250));
@@ -910,12 +911,16 @@ public class MainMenu {
                                                                                 send.println(courseName);
                                                                                 send.flush();
 
+                                                                                send.println(quizName.getText());
+                                                                                send.flush();
+
                                                                                 boolean added = Boolean.parseBoolean(get.readLine());
 
                                                                                 if (added) {
 
                                                                                     JOptionPane.showMessageDialog(null,
-                                                                                            "Quiz Added Successfully",
+                                                                                            "Quiz Added Successfully\n" +
+                                                                                                    "Select Quiz from main screen to add questions!",
                                                                                             String.format("%s: %s Add Quiz", name, courseName),
                                                                                             JOptionPane.INFORMATION_MESSAGE);
 
@@ -1002,7 +1007,6 @@ public class MainMenu {
                                                                             }
 
 
-
                                                                         }   // Add entire quiz file
 
                                                                     }
@@ -1016,10 +1020,9 @@ public class MainMenu {
                                                         }
 
 
-
                                                     } while (!courseChoice.equals("Exit")); // Do nothing when user chooses to exit
 
-                                                }
+                                                }   //Select a course to work with
 
                                                 case "Add Course" -> {
 
@@ -1141,7 +1144,8 @@ public class MainMenu {
 
                                                 }   // Remove course from database
 
-                                                case "Exit" -> {} // Do nothing when user chooses to exit
+                                                case "Exit" -> {
+                                                } // Do nothing when user chooses to exit
 
                                             }
 
@@ -1282,9 +1286,119 @@ public class MainMenu {
 
                                                                         case 0 -> {
 
+                                                                            send.println("randomizeQuiz");  // send request to server
+                                                                            send.flush();
+
+                                                                            send.println(quizSelected);
+                                                                            send.flush();
+
+                                                                            send.println(thisAccount.getType());
+                                                                            send.flush();
+
+                                                                            String quiz = get.readLine();
+
+                                                                            int totalQuestions = Integer.parseInt(get.readLine());
+                                                                            int correctAns;
+
+                                                                            quiz = quizFormatter(quiz); // use formatter method to format correctly
+
+                                                                            JTextArea quizText = new JTextArea("Quiz Instructions:\n");
+                                                                            quizText.append("Upload A .txt file with your answers.\n");
+                                                                            quizText.append("The file format should be as follows:\n\n");
+                                                                            quizText.append("Quiz Name\nFull Question\nAnswer\nFull Question\nAnswer\n\n");
+                                                                            quizText.append("You will be given the option to upload your file on the next screen.\n");
+                                                                            quizText.append("Good Luck!\n\n");
+
+                                                                            quizText.append(quiz);
+
+                                                                            JScrollPane scrollQuiz = new JScrollPane(quizText);
+                                                                            quizText.setEditable(false);
+                                                                            quizText.setLineWrap(true);
+                                                                            quizText.setWrapStyleWord(true);
+                                                                            scrollQuiz.setPreferredSize(new Dimension(250, 250));
+
+                                                                            JOptionPane.showMessageDialog(null,
+                                                                                    scrollQuiz, String.format("%s: %s", courseName, quizSelected),
+                                                                                    JOptionPane.PLAIN_MESSAGE);
+
+                                                                            JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+                                                                            jfc.setDialogTitle("Select .txt File to Answer Quiz:");
+
+                                                                            String fileToAdd = null;
+
+                                                                            int returnValue = jfc.showOpenDialog(null);
+
+                                                                            if (returnValue == JFileChooser.APPROVE_OPTION) {
+
+                                                                                if (jfc.getSelectedFile().getAbsolutePath().split("\\.")[1].equals("txt")) {
+
+                                                                                    fileToAdd = jfc.getSelectedFile().getAbsolutePath();
+
+                                                                                } else {
+
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Invalid File Type!",
+                                                                                            String.format("%s: Attempt %s", name, quizSelected),
+                                                                                            JOptionPane.WARNING_MESSAGE);
+
+                                                                                    break;
+
+                                                                                }
+
+                                                                            }
+
+                                                                            if (fileToAdd == null) {
+
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        "No File Selected!",
+                                                                                        String.format("%s: Attempt %s", name, quizSelected),
+                                                                                        JOptionPane.WARNING_MESSAGE);
+                                                                                break;
+
+                                                                            }
+
+                                                                            send.println("correctAns");
+                                                                            send.println(fileToAdd);
+                                                                            correctAns = Integer.parseInt(get.readLine());
+
+                                                                            if (correctAns == -1) {
+
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        "Quiz Attempt Canceled",
+                                                                                        String.format("%s: Attempt %s", name, quizSelected),
+                                                                                        JOptionPane.WARNING_MESSAGE);
+
+                                                                            }
+
+                                                                            double score = (double) correctAns / (double) totalQuestions;
+
+                                                                            send.println("addSubmission");
+                                                                            send.println(name);
+                                                                            send.println(quizSelected);
+                                                                            send.println(score);
+                                                                            send.println(courseName);
+
+                                                                            boolean submitted = Boolean.parseBoolean(get.readLine());
+
+                                                                            if (submitted) {
+
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        String.format("Quiz Attempt Submitted!\n" +
+                                                                                                "Your Score: %.2f%%", score),
+                                                                                        String.format("%s: Attempt %s", name, quizSelected),
+                                                                                        JOptionPane.INFORMATION_MESSAGE);
+
+                                                                            } else {
+
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        "Quiz Submissions Failed!",
+                                                                                        String.format("%s: Attempt %s", name, quizSelected),
+                                                                                        JOptionPane.WARNING_MESSAGE);
+
+                                                                            }
 
 
-                                                                        } //TODO
+                                                                        }   //Attempt Quiz
 
                                                                         case 1 -> {
 
@@ -1367,7 +1481,8 @@ public class MainMenu {
 
                                                 }   // Show overall score from all quizzes
 
-                                                case "Exit" -> {}   // Do nothing when user chooses to exit
+                                                case "Exit" -> {
+                                                }   // Do nothing when user chooses to exit
 
                                             }
 
@@ -1378,7 +1493,8 @@ public class MainMenu {
 
                                 }   // Courses
 
-                                case 2 -> {}    // Do nothing when user chooses to exit
+                                case 2 -> {
+                                }    // Do nothing when user chooses to exit
 
                                 default -> mainOption = 2;  // If no option selected
 
@@ -1473,7 +1589,8 @@ public class MainMenu {
 
                     } // create a new account
 
-                    case 2 -> {}    // Do nothing when user chooses to exit
+                    case 2 -> {
+                    }    // Do nothing when user chooses to exit
 
                     default -> mainOption = 2;
 

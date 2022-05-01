@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/**
+ * Project 5 - Quiz
+ * <p>
+ * Handles creating a Quiz object and has helper methods to support the QuizFile object.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
+
 public class Quiz {
 
     private String course;

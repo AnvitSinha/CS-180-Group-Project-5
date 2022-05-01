@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/**
+ * Project 5 - Question
+ * <p>
+ * Creates a question object to be added to a quiz. Contains helper methods to support Quiz and QuizFile classes.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
+
 public class Question {
     private int type;
     private String question;

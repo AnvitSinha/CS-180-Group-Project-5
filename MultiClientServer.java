@@ -1,5 +1,17 @@
 import javax.swing.*;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * Project 5 - MultiClientServer
+ * <p>
+ * Handles creating a new thread for each client so that multiple users can use the program at the same time. This
+ * accepts users on port 5650. This server runs continuously until it is closed manually and is always ready to accept
+ * another user.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
 
 public class MultiClientServer {
 

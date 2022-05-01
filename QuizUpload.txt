@@ -1,0 +1,13 @@
+lineQuizSeparator
+MA161
+Related Rates
+questionSeparator
+MCQ
+What is the principle that related rates is based on?
+Implicit Differentiation
+Fundamental theorem of calculus
+Pythagorean Theorem
+Intermediate Value Theorem
+Implicit Differentiation
+questionSeparator
+lineQuizSeparator

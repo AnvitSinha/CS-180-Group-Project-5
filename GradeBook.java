@@ -1,5 +1,17 @@
 import java.io.*;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+/**
+ * Project 5 - GradeBook
+ * <p>
+ * Handles all requests for the student grade book. Has all methods to calculate averages for quizzes, courses, and
+ * students, as well as methods for adding submissions with time stamps.
+ *
+ * @author Group 66, L16
+ * @version May 2, 2022
+ */
 
 public class GradeBook {
 
@@ -129,9 +141,17 @@ public class GradeBook {
         allStudentScores.add(score);
         allCourseName.add(courseName);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+
+        ZonedDateTime now = ZonedDateTime.now();
+
+        String submissionTime = now.format(formatter);
+
+        allSubmissionTimes.add(submissionTime);
+
         try (PrintWriter pw = new PrintWriter(new FileWriter(studentGradebook, true))) {
 
-            pw.println(String.format("%s,%s,%.2f,%s", studentName, quizName, score, courseName));
+            pw.println(String.format("%s,%s,%.2f,%s,%s", studentName, quizName, score, courseName, submissionTime));
 
             return true;
 
@@ -167,22 +187,18 @@ public class GradeBook {
 
         ArrayList<String> quizSubmissions = new ArrayList<>();
 
-        for(String names : allQuizNames) {
+        for(int i = 0; i < allQuizNames.size(); i++) {
 
-            if (names.equalsIgnoreCase(quizName)) {
+            if (allQuizNames.get(i).equalsIgnoreCase(quizName)) {
 
-                int num = allQuizNames.indexOf(names);
-
-                // Formats string to view
-                String submission = String.format("Student: %s\nScore: %.2f\nSubmitted at: %s\n",
-                        allGradebookStudents.get(num), allStudentScores.get(num), allSubmissionTimes.get(num));
+                String submission = String.format("Student: %s\nScore: %.2f\nSubmitted at: %s",
+                        allGradebookStudents.get(i), allStudentScores.get(i), allSubmissionTimes.get(i));
 
                 quizSubmissions.add(submission);
 
-
             }
 
-        } //TODO
+        }
 
         return quizSubmissions;
 
