@@ -254,6 +254,11 @@ public class MainMenu {
 
                                                         }
 
+                                                        JOptionPane.showMessageDialog(null,
+                                                                String.format("Account %s Updated!", choices[choice])
+                                                                , String.format("%s: Update Account", name),
+                                                                JOptionPane.INFORMATION_MESSAGE);
+
                                                     } else {
 
                                                         JOptionPane.showMessageDialog(null,
