@@ -72,8 +72,6 @@ public class MainMenu {
 
                         do {
 
-                            send.println("verify");
-
                             JTextField username = new JTextField();
                             JTextField password = new JPasswordField();
                             Object[] input = {"Username:", username, "Password:", password};
@@ -82,6 +80,8 @@ public class MainMenu {
                                     JOptionPane.OK_CANCEL_OPTION);
 
                             if (option == JOptionPane.OK_OPTION) {
+
+                                send.println("verify");
 
                                 send.println(username.getText());
                                 send.flush();
@@ -110,7 +110,7 @@ public class MainMenu {
                                     JOptionPane.showMessageDialog(null,
                                             "Invalid Credentials!\nTry Again!\n" +
                                                     "(Click Cancel to return to Main Menu)",
-                                            "Learning Management System", JOptionPane.PLAIN_MESSAGE);
+                                            "Learning Management System", JOptionPane.WARNING_MESSAGE);
 
                                 }
 
