@@ -464,6 +464,7 @@ public class MainServer implements Runnable {
 
                             synchronized (GATEKEEPER) {
                                 GradeBook.initializeStudentGradebook();
+
                                 String quiz = reader.readLine();
                                 ArrayList<String> submissions = GradeBook.viewQuizSubmissions(quiz);
 

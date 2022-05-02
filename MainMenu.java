@@ -458,155 +458,197 @@ public class MainMenu {
 
                                                                     }   // if no quiz is selected
 
-                                                                    String[] quizChoices = {"View Quiz", "Add Question",
-                                                                            "Remove Question", "Remove Quiz", "View Quiz Submissions"};
+                                                                    String quizChoice;
 
-                                                                    String quizChoice = (String) JOptionPane.showInputDialog(
-                                                                            null, "Select Action:",
-                                                                            String.format("%s: %s Menu", name, quizSelected),
-                                                                            JOptionPane.PLAIN_MESSAGE, null, quizChoices,
-                                                                            null);
+                                                                    do {
 
-                                                                    switch (quizChoice) {
+                                                                        String[] quizChoices = {"View Quiz", "Add Question",
+                                                                                "Remove Question", "Remove Quiz", "View Quiz Submissions",
+                                                                        "Exit"};
 
-                                                                        case "View Quiz" -> {
+                                                                        quizChoice = (String) JOptionPane.showInputDialog(
+                                                                                null, "Select Action:",
+                                                                                String.format("%s: %s Menu", name, quizSelected),
+                                                                                JOptionPane.PLAIN_MESSAGE, null, quizChoices,
+                                                                                null);
 
-                                                                            send.println("printQuiz");  // send request to server
-                                                                            send.flush();
+                                                                        if (quizChoice == null) {
 
-                                                                            send.println(quizSelected);
-                                                                            send.flush();
+                                                                            break;
 
-                                                                            send.println(thisAccount.getType());
-                                                                            send.flush();
+                                                                        }
 
-                                                                            String quiz = get.readLine();
+                                                                        switch (quizChoice) {
 
-                                                                            quiz = quizFormatter(quiz); // use formatter method to format correctly
+                                                                            case "View Quiz" -> {
 
-                                                                            JTextArea quizText = new JTextArea(quiz);
+                                                                                send.println("printQuiz");  // send request to server
+                                                                                send.flush();
 
-                                                                            JScrollPane scrollQuiz = new JScrollPane(quizText);
-                                                                            quizText.setEditable(false);
-                                                                            quizText.setLineWrap(true);
-                                                                            quizText.setWrapStyleWord(true);
-                                                                            scrollQuiz.setPreferredSize(new Dimension(250, 250));
+                                                                                send.println(quizSelected);
+                                                                                send.flush();
 
-                                                                            JOptionPane.showMessageDialog(null,
-                                                                                    scrollQuiz, String.format("%s: %s", courseName, quizSelected),
-                                                                                    JOptionPane.PLAIN_MESSAGE);
+                                                                                send.println(thisAccount.getType());
+                                                                                send.flush();
 
+                                                                                String quiz = get.readLine();
 
-                                                                        }       // See all questions for the quiz
+                                                                                quiz = quizFormatter(quiz); // use formatter method to format correctly
 
-                                                                        case "Add Question" -> {
+                                                                                JTextArea quizText = new JTextArea(quiz);
 
-                                                                            String[] qTypeChoice = {"T/F", "MCQ"};
-                                                                            int qType = JOptionPane.showOptionDialog(null,
-                                                                                    "Please Select Quiz Type",
-                                                                                    String.format("%s: %s Question Type", name, quizSelected),
-                                                                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                                                                                    null, qTypeChoice, null);
-
-                                                                            if (qType == -1) {
-
-                                                                                break;
-
-                                                                            }   // if user exits out of dialog box
-
-                                                                            JTextField question = new JTextField();
-                                                                            Object[] inputQ = {"Question:", question};
-
-                                                                            JTextField correctAns = new JTextField();
-                                                                            Object[] correct = {"Correct Ans:", correctAns};
-
-                                                                            int option1 = JOptionPane.showConfirmDialog(null, inputQ,
-                                                                                    String.format("%s: %s Add Question", name, quizSelected),
-                                                                                    JOptionPane.OK_CANCEL_OPTION);
-
-                                                                            if (question.getText().isBlank()) {
+                                                                                JScrollPane scrollQuiz = new JScrollPane(quizText);
+                                                                                quizText.setEditable(false);
+                                                                                quizText.setLineWrap(true);
+                                                                                quizText.setWrapStyleWord(true);
+                                                                                scrollQuiz.setPreferredSize(new Dimension(250, 250));
 
                                                                                 JOptionPane.showMessageDialog(null,
-                                                                                        "Question Add Canceled",
+                                                                                        scrollQuiz, String.format("%s: %s", courseName, quizSelected),
+                                                                                        JOptionPane.PLAIN_MESSAGE);
+
+
+                                                                            }       // See all questions for the quiz
+
+                                                                            case "Add Question" -> {
+
+                                                                                String[] qTypeChoice = {"T/F", "MCQ"};
+                                                                                int qType = JOptionPane.showOptionDialog(null,
+                                                                                        "Please Select Quiz Type",
+                                                                                        String.format("%s: %s Question Type", name, quizSelected),
+                                                                                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+                                                                                        null, qTypeChoice, null);
+
+                                                                                if (qType == -1) {
+
+                                                                                    break;
+
+                                                                                }   // if user exits out of dialog box
+
+                                                                                JTextField question = new JTextField();
+                                                                                Object[] inputQ = {"Question:", question};
+
+                                                                                JTextField correctAns = new JTextField();
+                                                                                Object[] correct = {"Correct Ans:", correctAns};
+
+                                                                                int option1 = JOptionPane.showConfirmDialog(null, inputQ,
                                                                                         String.format("%s: %s Add Question", name, quizSelected),
-                                                                                        JOptionPane.WARNING_MESSAGE);
+                                                                                        JOptionPane.OK_CANCEL_OPTION);
 
-                                                                                break;
+                                                                                if (question.getText().isBlank()) {
 
-                                                                            }   // if no question is entered
-
-                                                                            if (option1 == JOptionPane.OK_OPTION) {
-
-                                                                                StringBuilder choices = new StringBuilder();
-
-                                                                                if (qType == 1) {
-
-                                                                                    JTextField numChoices = new JTextField();
-                                                                                    JTextField enteredChoice = new JTextField();
-
-                                                                                    Object[] inputNum = {"Number of Choices:", numChoices};
-                                                                                    Object[] inputC = {"Enter Option:", enteredChoice};
-
-                                                                                    int option2 = JOptionPane.showConfirmDialog(
-                                                                                            null, inputNum,
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Question Add Canceled",
                                                                                             String.format("%s: %s Add Question", name, quizSelected),
-                                                                                            JOptionPane.OK_CANCEL_OPTION);
+                                                                                            JOptionPane.WARNING_MESSAGE);
 
-                                                                                    if (option2 == JOptionPane.OK_OPTION) {
+                                                                                    break;
 
-                                                                                        int numQ;
-                                                                                        try {
-                                                                                            numQ = Integer.parseInt(numChoices.getText());
-                                                                                        } catch (NumberFormatException e) {
-                                                                                            JOptionPane.showMessageDialog(null,
-                                                                                                    "Not a valid number!\n" +
-                                                                                                            "Question Add Canceled",
-                                                                                                    String.format("%s: %s Add Question", name, quizSelected),
-                                                                                                    JOptionPane.PLAIN_MESSAGE);
-                                                                                            break;
-                                                                                        }   // Show error if invalid number is entered
+                                                                                }   // if no question is entered
+
+                                                                                if (option1 == JOptionPane.OK_OPTION) {
+
+                                                                                    StringBuilder choices = new StringBuilder();
+
+                                                                                    if (qType == 1) {
+
+                                                                                        JTextField numChoices = new JTextField();
+                                                                                        JTextField enteredChoice = new JTextField();
+
+                                                                                        Object[] inputNum = {"Number of Choices:", numChoices};
+                                                                                        Object[] inputC = {"Enter Option:", enteredChoice};
+
+                                                                                        int option2 = JOptionPane.showConfirmDialog(
+                                                                                                null, inputNum,
+                                                                                                String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                JOptionPane.OK_CANCEL_OPTION);
+
+                                                                                        if (option2 == JOptionPane.OK_OPTION) {
+
+                                                                                            int numQ;
+                                                                                            try {
+                                                                                                numQ = Integer.parseInt(numChoices.getText());
+                                                                                            } catch (NumberFormatException e) {
+                                                                                                JOptionPane.showMessageDialog(null,
+                                                                                                        "Not a valid number!\n" +
+                                                                                                                "Question Add Canceled",
+                                                                                                        String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                        JOptionPane.PLAIN_MESSAGE);
+                                                                                                break;
+                                                                                            }   // Show error if invalid number is entered
 
 
-                                                                                        for (int i = 0; i < numQ; i++) {    // repeat for number of times as choices
+                                                                                            for (int i = 0; i < numQ; i++) {    // repeat for number of times as choices
 
-                                                                                            int option3 = JOptionPane.showConfirmDialog(
-                                                                                                    null, inputC,
+                                                                                                int option3 = JOptionPane.showConfirmDialog(
+                                                                                                        null, inputC,
+                                                                                                        String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                        JOptionPane.OK_CANCEL_OPTION);
+
+                                                                                                if (option3 == JOptionPane.OK_OPTION) {
+
+                                                                                                    if (enteredChoice.getText().isBlank()) {
+
+                                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                                "Question Add Canceled",
+                                                                                                                String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                                JOptionPane.WARNING_MESSAGE);
+
+                                                                                                        break;
+
+                                                                                                    }
+
+                                                                                                    choices.append(enteredChoice.getText());
+                                                                                                    choices.append("&");
+
+                                                                                                    enteredChoice.setText("");
+
+
+                                                                                                }
+
+                                                                                            }
+
+                                                                                            if (choices.toString().split("&").length < numQ) {
+
+                                                                                                JOptionPane.showMessageDialog(null,
+                                                                                                        "Question Add Canceled",
+                                                                                                        String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                        JOptionPane.WARNING_MESSAGE);
+
+                                                                                                break;
+
+                                                                                            }   // If less choices are entered than initially specified number
+
+                                                                                            int option3 = JOptionPane.showConfirmDialog(null, correct,
                                                                                                     String.format("%s: %s Add Question", name, quizSelected),
                                                                                                     JOptionPane.OK_CANCEL_OPTION);
 
                                                                                             if (option3 == JOptionPane.OK_OPTION) {
 
-                                                                                                if (enteredChoice.getText().isBlank()) {
+                                                                                                if (correctAns.getText().isBlank()) {
 
                                                                                                     JOptionPane.showMessageDialog(null,
-                                                                                                            "Question Add Canceled",
+                                                                                                            "No Answer Entered!\nQuestion Add Canceled",
                                                                                                             String.format("%s: %s Add Question", name, quizSelected),
                                                                                                             JOptionPane.WARNING_MESSAGE);
 
                                                                                                     break;
-
                                                                                                 }
 
-                                                                                                choices.append(enteredChoice.getText());
-                                                                                                choices.append("&");
 
-                                                                                                enteredChoice.setText("");
+                                                                                            } else {
 
+                                                                                                JOptionPane.showMessageDialog(null,
+                                                                                                        "Question Add Canceled",
+                                                                                                        String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                        JOptionPane.WARNING_MESSAGE);
+
+                                                                                                break;
 
                                                                                             }
 
                                                                                         }
-
-                                                                                        if (choices.toString().split("&").length < numQ) {
-
-                                                                                            JOptionPane.showMessageDialog(null,
-                                                                                                    "Question Add Canceled",
-                                                                                                    String.format("%s: %s Add Question", name, quizSelected),
-                                                                                                    JOptionPane.WARNING_MESSAGE);
-
-                                                                                            break;
-
-                                                                                        }   // If less choices are entered than initially specified number
+                                                                                    } else {
 
                                                                                         int option3 = JOptionPane.showConfirmDialog(null, correct,
                                                                                                 String.format("%s: %s Add Question", name, quizSelected),
@@ -636,68 +678,47 @@ public class MainMenu {
 
                                                                                         }
 
+                                                                                        choices.append("True&False&");  // options are True and False
+
+
                                                                                     }
-                                                                                } else {
 
-                                                                                    int option3 = JOptionPane.showConfirmDialog(null, correct,
-                                                                                            String.format("%s: %s Add Question", name, quizSelected),
-                                                                                            JOptionPane.OK_CANCEL_OPTION);
+                                                                                    send.println("addQuestion");    // send request to server
+                                                                                    send.flush();
 
-                                                                                    if (option3 == JOptionPane.OK_OPTION) {
+                                                                                    send.println(quizSelected);
+                                                                                    send.flush();
 
-                                                                                        if (correctAns.getText().isBlank()) {
+                                                                                    send.println(qType);
+                                                                                    send.flush();
 
-                                                                                            JOptionPane.showMessageDialog(null,
-                                                                                                    "No Answer Entered!\nQuestion Add Canceled",
-                                                                                                    String.format("%s: %s Add Question", name, quizSelected),
-                                                                                                    JOptionPane.WARNING_MESSAGE);
+                                                                                    send.println(question.getText());
+                                                                                    send.flush();
 
-                                                                                            break;
-                                                                                        }
+                                                                                    send.println(choices);
+                                                                                    send.flush();
 
+                                                                                    send.println(correctAns.getText());
+                                                                                    send.flush();
+
+                                                                                    boolean added = Boolean.parseBoolean(get.readLine());
+
+                                                                                    if (added) {
+
+                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                "Question Add Successful!",
+                                                                                                String.format("%s: %s Add Question", name, quizSelected),
+                                                                                                JOptionPane.INFORMATION_MESSAGE);
 
                                                                                     } else {
 
                                                                                         JOptionPane.showMessageDialog(null,
                                                                                                 "Question Add Canceled",
                                                                                                 String.format("%s: %s Add Question", name, quizSelected),
-                                                                                                JOptionPane.WARNING_MESSAGE);
-
-                                                                                        break;
+                                                                                                JOptionPane.WARNING_MESSAGE);   //error message
 
                                                                                     }
 
-                                                                                    choices.append("True&False&");  // options are True and False
-
-
-                                                                                }
-
-                                                                                send.println("addQuestion");    // send request to server
-                                                                                send.flush();
-
-                                                                                send.println(quizSelected);
-                                                                                send.flush();
-
-                                                                                send.println(qType);
-                                                                                send.flush();
-
-                                                                                send.println(question.getText());
-                                                                                send.flush();
-
-                                                                                send.println(choices);
-                                                                                send.flush();
-
-                                                                                send.println(correctAns.getText());
-                                                                                send.flush();
-
-                                                                                boolean added = Boolean.parseBoolean(get.readLine());
-
-                                                                                if (added) {
-
-                                                                                    JOptionPane.showMessageDialog(null,
-                                                                                            "Question Add Successful!",
-                                                                                            String.format("%s: %s Add Question", name, quizSelected),
-                                                                                            JOptionPane.INFORMATION_MESSAGE);
 
                                                                                 } else {
 
@@ -709,164 +730,156 @@ public class MainMenu {
                                                                                 }
 
 
-                                                                            } else {
+                                                                            }    // Add a question to the quiz
 
-                                                                                JOptionPane.showMessageDialog(null,
-                                                                                        "Question Add Canceled",
-                                                                                        String.format("%s: %s Add Question", name, quizSelected),
-                                                                                        JOptionPane.WARNING_MESSAGE);   //error message
+                                                                            case "Remove Question" -> {
 
-                                                                            }
+                                                                                JTextField qNumField = new JTextField();
+                                                                                Object[] qNumBox = {"Question Number", qNumField};
 
-
-                                                                        }    // Add a question to the quiz
-
-                                                                        case "Remove Question" -> {
-
-                                                                            JTextField qNumField = new JTextField();
-                                                                            Object[] qNumBox = {"Question Number", qNumField};
-
-                                                                            int option1 = JOptionPane.showConfirmDialog(null,
-                                                                                    qNumBox,
-                                                                                    String.format("%s: %s Remove Question", name, quizSelected),
-                                                                                    JOptionPane.OK_CANCEL_OPTION);
-
-                                                                            if (option1 == JOptionPane.OK_OPTION) {
-
-                                                                                int qNum;
-
-                                                                                try {
-
-                                                                                    qNum = Integer.parseInt(qNumField.getText());
-
-                                                                                } catch (NumberFormatException e) {
-
-                                                                                    JOptionPane.showMessageDialog(null,
-                                                                                            "Not a valid Question Number\n" +
-                                                                                                    "Question Removal Canceled",
-                                                                                            String.format("%s: %s Remove Question", name, quizSelected),
-                                                                                            JOptionPane.WARNING_MESSAGE);
-                                                                                    break;
-
-                                                                                }
-
-                                                                                send.println("deleteQuestion"); // send request to server
-                                                                                send.flush();
-
-                                                                                send.println(quizSelected);
-                                                                                send.flush();
-
-                                                                                send.println(qNum);
-                                                                                send.flush();
-
-                                                                                boolean removed = Boolean.parseBoolean(get.readLine());
-
-                                                                                if (removed) {
-
-                                                                                    JOptionPane.showMessageDialog(null,
-                                                                                            "Question Removed!",
-                                                                                            String.format("%s: %s Remove Question", name, quizSelected),
-                                                                                            JOptionPane.INFORMATION_MESSAGE);
-
-                                                                                } else {
-
-                                                                                    JOptionPane.showMessageDialog(null,
-                                                                                            "Question Removal Canceled",
-                                                                                            String.format("%s: %s Remove Question", name, quizSelected),
-                                                                                            JOptionPane.WARNING_MESSAGE);
-
-                                                                                }
-
-                                                                            } else {
-
-                                                                                JOptionPane.showMessageDialog(null,
-                                                                                        "Question Delete Canceled",
+                                                                                int option1 = JOptionPane.showConfirmDialog(null,
+                                                                                        qNumBox,
                                                                                         String.format("%s: %s Remove Question", name, quizSelected),
-                                                                                        JOptionPane.WARNING_MESSAGE);
+                                                                                        JOptionPane.OK_CANCEL_OPTION);
 
-                                                                            }
+                                                                                if (option1 == JOptionPane.OK_OPTION) {
 
-                                                                        } // Remove a question from quiz
+                                                                                    int qNum;
 
-                                                                        case "Remove Quiz" -> {
+                                                                                    try {
 
-                                                                            int option1 = JOptionPane.showConfirmDialog(
-                                                                                    null,
-                                                                                    String.format("Are you sure to delete %s?", quizSelected),
-                                                                                    String.format("%s: Delete %s", name, quizSelected),
-                                                                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                                                                                        qNum = Integer.parseInt(qNumField.getText());
 
-                                                                            if (option1 == JOptionPane.OK_OPTION) {
+                                                                                    } catch (NumberFormatException e) {
 
-                                                                                send.println("deleteQuiz");
+                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                "Not a valid Question Number\n" +
+                                                                                                        "Question Removal Canceled",
+                                                                                                String.format("%s: %s Remove Question", name, quizSelected),
+                                                                                                JOptionPane.WARNING_MESSAGE);
+                                                                                        break;
+
+                                                                                    }
+
+                                                                                    send.println("deleteQuestion"); // send request to server
+                                                                                    send.flush();
+
+                                                                                    send.println(quizSelected);
+                                                                                    send.flush();
+
+                                                                                    send.println(qNum);
+                                                                                    send.flush();
+
+                                                                                    boolean removed = Boolean.parseBoolean(get.readLine());
+
+                                                                                    if (removed) {
+
+                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                "Question Removed!",
+                                                                                                String.format("%s: %s Remove Question", name, quizSelected),
+                                                                                                JOptionPane.INFORMATION_MESSAGE);
+
+                                                                                    } else {
+
+                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                "Question Removal Canceled",
+                                                                                                String.format("%s: %s Remove Question", name, quizSelected),
+                                                                                                JOptionPane.WARNING_MESSAGE);
+
+                                                                                    }
+
+                                                                                } else {
+
+                                                                                    JOptionPane.showMessageDialog(null,
+                                                                                            "Question Delete Canceled",
+                                                                                            String.format("%s: %s Remove Question", name, quizSelected),
+                                                                                            JOptionPane.WARNING_MESSAGE);
+
+                                                                                }
+
+                                                                            } // Remove a question from quiz
+
+                                                                            case "Remove Quiz" -> {
+
+                                                                                int option1 = JOptionPane.showConfirmDialog(
+                                                                                        null,
+                                                                                        String.format("Are you sure to delete %s?", quizSelected),
+                                                                                        String.format("%s: Delete %s", name, quizSelected),
+                                                                                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+                                                                                if (option1 == JOptionPane.OK_OPTION) {
+
+                                                                                    send.println("deleteQuiz");
+                                                                                    send.flush();
+
+                                                                                    send.println(quizSelected);
+                                                                                    send.flush();
+
+                                                                                    boolean deleted = Boolean.parseBoolean(get.readLine());
+
+                                                                                    if (deleted) {
+
+                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                "Quiz Removed!",
+                                                                                                String.format("%s: Remove %s", name, quizSelected),
+                                                                                                JOptionPane.INFORMATION_MESSAGE);
+
+                                                                                    } else {
+
+                                                                                        JOptionPane.showMessageDialog(null,
+                                                                                                "Quiz Removal Canceled",
+                                                                                                String.format("%s: Remove %s", name, quizSelected),
+                                                                                                JOptionPane.WARNING_MESSAGE);
+
+                                                                                    }
+
+
+                                                                                }
+
+                                                                            }     // Delete entire quiz
+
+                                                                            case "View Quiz Submissions" -> {
+
+                                                                                send.println("quizSubmissions");
                                                                                 send.flush();
 
                                                                                 send.println(quizSelected);
                                                                                 send.flush();
 
-                                                                                boolean deleted = Boolean.parseBoolean(get.readLine());
-
-                                                                                if (deleted) {
-
-                                                                                    JOptionPane.showMessageDialog(null,
-                                                                                            "Quiz Removed!",
-                                                                                            String.format("%s: Remove %s", name, quizSelected),
-                                                                                            JOptionPane.INFORMATION_MESSAGE);
-
-                                                                                } else {
-
-                                                                                    JOptionPane.showMessageDialog(null,
-                                                                                            "Quiz Removal Canceled",
-                                                                                            String.format("%s: Remove %s", name, quizSelected),
-                                                                                            JOptionPane.WARNING_MESSAGE);
-
-                                                                                }
+                                                                                int subs = Integer.parseInt(get.readLine());
 
 
-                                                                            }
+                                                                                JTextArea viewSubs = new JTextArea("Quiz Submissions\n\n");
 
-                                                                        }     // Delete entire quiz
+                                                                                for (int i = 0; i < subs; i++) {
 
-                                                                        case "View Quiz Submissions" -> {
+                                                                                    viewSubs.append(get.readLine());
+                                                                                    viewSubs.append("\n");
+                                                                                    viewSubs.append(get.readLine());
+                                                                                    viewSubs.append("\n");
+                                                                                    viewSubs.append(get.readLine());
+                                                                                    viewSubs.append("\n");
+                                                                                    viewSubs.append("\n");
 
-                                                                            send.println("quizSubmissions");
-                                                                            send.flush();
+                                                                                }   // get all submissions from server
 
-                                                                            send.println(quizSelected);
-                                                                            send.flush();
+                                                                                viewSubs.setLineWrap(true);
+                                                                                viewSubs.setWrapStyleWord(true);
+                                                                                viewSubs.setEditable(false);
+                                                                                JScrollPane scrollSubs = new JScrollPane(viewSubs);
 
-                                                                            int subs = Integer.parseInt(get.readLine());
+                                                                                scrollSubs.setPreferredSize(new Dimension(250, 250));
 
-
-                                                                            JTextArea viewSubs = new JTextArea("Quiz Submissions\n\n");
-
-                                                                            for (int i = 0; i < subs; i++) {
-
-                                                                                viewSubs.append(get.readLine());
-                                                                                viewSubs.append("\n");
-                                                                                viewSubs.append(get.readLine());
-                                                                                viewSubs.append("\n");
-                                                                                viewSubs.append(get.readLine());
-                                                                                viewSubs.append("\n");
-                                                                                viewSubs.append("\n");
-
-                                                                            }   // get all submissions from server
-
-                                                                            viewSubs.setLineWrap(true);
-                                                                            viewSubs.setWrapStyleWord(true);
-                                                                            viewSubs.setEditable(false);
-                                                                            JScrollPane scrollSubs = new JScrollPane(viewSubs);
-
-                                                                            scrollSubs.setPreferredSize(new Dimension(250, 250));
-
-                                                                            JOptionPane.showMessageDialog(null,
-                                                                                    scrollSubs, String.format("%s: %s", courseName, quizSelected),
-                                                                                    JOptionPane.PLAIN_MESSAGE);
+                                                                                JOptionPane.showMessageDialog(null,
+                                                                                        scrollSubs, String.format("%s: %s", courseName, quizSelected),
+                                                                                        JOptionPane.PLAIN_MESSAGE);
 
 
-                                                                        }   // View all submissions for the quiz
+                                                                            }   // View all submissions for the quiz
 
-                                                                    }
+                                                                        }
+
+                                                                    } while (!quizChoice.equals("Exit"));
 
 
                                                                 }   // View all Quizzes in the course
@@ -1405,7 +1418,11 @@ public class MainMenu {
 
                                                                         case 1 -> {
 
+                                                                            send.println("quizAverage");
+                                                                            send.flush();
+
                                                                             send.println(quizSelected);
+                                                                            send.flush();
 
                                                                             double average = Double.parseDouble(get.readLine());
 
@@ -1456,7 +1473,7 @@ public class MainMenu {
                                                                     double courseGrade = Double.parseDouble(get.readLine());
 
                                                                     JOptionPane.showMessageDialog(null,
-                                                                            String.format("Your Grade in %s is: %.2f",
+                                                                            String.format("Course Average Grade in %s is: %.2f",
                                                                                     thisCourse.courseName, courseGrade),
                                                                             String.format("%s: Course Grade", name),
                                                                             JOptionPane.INFORMATION_MESSAGE);
@@ -1609,6 +1626,8 @@ public class MainMenu {
                     "Learning Management System", JOptionPane.PLAIN_MESSAGE);
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             JOptionPane.showMessageDialog(null, "An Error Occurred While Connecting to Server!",
                     "Server Error", JOptionPane.WARNING_MESSAGE);

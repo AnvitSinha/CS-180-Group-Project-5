@@ -6,26 +6,61 @@ TF
 cos(pi) = 0?
 True
 False
-True
+False
 questionSeparator
-TF
-pi
+MCQ
+what is 45 degrees in radians
 pi/45
 pi/2
 pi/3
 pi/4
 pi/4
 questionSeparator
-MCQ
-sin(0) = ___
-0
-pi
-3pi/2
-1
-0
-questionSeparator
 TF
 Is 3pi/2 in degrees 270 degrees?
+True
+False
+True
+questionSeparator
+MCQ
+What is Secant a reciprocal of?
+Cosine
+Sine
+Tangent
+Cotangent
+Cosine
+questionSeparator
+MCQ
+What is cosecant a reciprocal of
+Sine
+Cosine
+Tangent
+Cotangent
+Sine
+questionSeparator
+MCQ
+What is the radius of a unit circle
+0.5
+1
+2
+4
+1
+questionSeparator
+TF
+Degrees are the same as radians
+True
+False
+False
+questionSeparator
+MCQ
+Test MCQ
+1
+2
+3
+2
+questionSeparator
+TF
+Test TF
 True
 False
 True
@@ -253,5 +288,17 @@ You need to always use the else keyword after an if construct.
 True
 False
 False
+questionSeparator
+lineQuizSeparator
+MA161
+Related Rates
+questionSeparator
+MCQ
+What is the principle that related rates is based on?
+Implicit Differentiation
+Fundamental theorem of calculus
+Pythagorean Theorem
+Intermediate Value Theorem
+Implicit Differentiation
 questionSeparator
 lineQuizSeparator

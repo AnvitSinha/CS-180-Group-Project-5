@@ -3,3 +3,7 @@ Alec Schmidt,Trig Quiz,75.00,MA161,2022/04/25 08:33:10
 George Wu,Selection Quiz,33.33,CS180,2022/04/29 15:29:01
 Allan Wang,Trig Quiz,50.00,MA161,2022/04/28 13:01:56
 Teimko Chichindaze,Selection Quiz,100.00,CS180,2022/05/01 07:58:02
+Trial S ,Trig Quiz,60.00,MA161,2022/05/02 11:25:01
+Trial S ,Trig Quiz,72.50,MA161,2022/05/02 12:10:52
+Trial S,Final Exam,96.40,CS180,2022/04/28 11:52:37
+Trial S ,Trig Quiz,40.00,MA161,2022/05/02 13:10:58
