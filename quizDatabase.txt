@@ -230,7 +230,7 @@ True
 False
 False
 questionSeparator
-TF
+lineQuizSeparator
 CS180
 Selection Quiz
 questionSeparator

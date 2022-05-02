@@ -32,7 +32,6 @@ public class MainServer implements Runnable {
 
         try {
 
-
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             PrintWriter writer = new PrintWriter(client.getOutputStream(), true);
             String currentLine;
@@ -368,6 +367,8 @@ public class MainServer implements Runnable {
 
                             synchronized (GATEKEEPER) {
 
+                                Course.initializeCourses();
+
                                 ArrayList<String> allCourses = Course.listCourses();
 
                                 writer.println(allCourses.size());
@@ -386,12 +387,14 @@ public class MainServer implements Runnable {
                         case "deleteCourse" -> {
 
                             synchronized (GATEKEEPER) {
+
                                 String courseName = reader.readLine();
 
                                 String response = String.valueOf(Course.deleteCourse(courseName));
 
                                 writer.println(response);
                                 writer.flush();
+
                             }
 
                         }
@@ -399,6 +402,8 @@ public class MainServer implements Runnable {
                         case "courseDetails" -> {
 
                             synchronized (GATEKEEPER) {
+                                Course.initializeCourses();
+
                                 String courseName = reader.readLine();
 
                                 Course temp = new Course(courseName, q);
@@ -413,6 +418,8 @@ public class MainServer implements Runnable {
                         case "courseAverage" -> {
 
                             synchronized (GATEKEEPER) {
+                                GradeBook.initializeStudentGradebook();
+
                                 String course = reader.readLine();
 
                                 String response = String.valueOf(GradeBook.calculateCourseAverage(course));
@@ -426,6 +433,8 @@ public class MainServer implements Runnable {
                         case "studentAverage" -> {
 
                             synchronized (GATEKEEPER) {
+
+                                GradeBook.initializeStudentGradebook();
                                 String student = reader.readLine();
 
                                 String response = String.valueOf(GradeBook.calculateStudentAverage(student));
@@ -439,6 +448,7 @@ public class MainServer implements Runnable {
                         case "studentInCourse" -> {
 
                             synchronized (GATEKEEPER) {
+                                GradeBook.initializeStudentGradebook();
                                 String student = reader.readLine();
                                 String course = reader.readLine();
 
@@ -453,6 +463,7 @@ public class MainServer implements Runnable {
                         case "quizSubmissions" -> {
 
                             synchronized (GATEKEEPER) {
+                                GradeBook.initializeStudentGradebook();
                                 String quiz = reader.readLine();
                                 ArrayList<String> submissions = GradeBook.viewQuizSubmissions(quiz);
 
@@ -473,6 +484,7 @@ public class MainServer implements Runnable {
                         case "quizAverage" -> {
 
                             synchronized (GATEKEEPER) {
+                                GradeBook.initializeStudentGradebook();
                                 String quizName = reader.readLine();
 
                                 double average = GradeBook.calculateQuizAverage(quizName);
@@ -485,6 +497,7 @@ public class MainServer implements Runnable {
                         case "addSubmission" -> {
 
                             synchronized (GATEKEEPER) {
+
                                 String name = reader.readLine();
                                 String quiz = reader.readLine();
                                 double score = Double.parseDouble(reader.readLine());
