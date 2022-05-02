@@ -1370,7 +1370,7 @@ public class MainMenu {
 
                                                                             }
 
-                                                                            double score = (double) correctAns / (double) totalQuestions;
+                                                                            double score = ((double) correctAns / (double) totalQuestions) * 100;
 
                                                                             send.println("addSubmission");
                                                                             send.println(name);
@@ -1471,8 +1471,13 @@ public class MainMenu {
                                                 case "View Your Overall Score" -> {
 
                                                     send.println("studentAverage");
+                                                    send.flush();
+
+                                                    send.println(name);
+                                                    send.flush();
 
                                                     double overallScore = Double.parseDouble(get.readLine());
+                                                    System.out.println(overallScore);
 
                                                     JOptionPane.showMessageDialog(null,
                                                             String.format("Your Overall Score is: %.2f", overallScore),

@@ -86,6 +86,12 @@ public class GradeBook {
 
         }
 
+        if (num == 0) {
+
+            return 0;
+
+        }
+
         return (sum / num);
 
     } //Finds the average in that course for all students
@@ -103,6 +109,12 @@ public class GradeBook {
                 num++;
 
             }
+
+        }
+
+        if (num == 0) {
+
+            return 0;
 
         }
 
@@ -127,6 +139,12 @@ public class GradeBook {
                 }
 
             }
+
+        }
+
+        if (num == 0) {
+
+            return 0.00;
 
         }
 
@@ -176,6 +194,12 @@ public class GradeBook {
                 num++;
 
             }
+
+        }
+
+        if (num == 0) {
+
+            return 0;
 
         }
 
