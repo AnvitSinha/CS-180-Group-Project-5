@@ -26,6 +26,7 @@ public class Account {
     private String type;
     private int accountNumber;
 
+    // method not used in project 5
     public Account(Scanner scanner, String type) {
 
         System.out.println("Enter User's Full Name: ");

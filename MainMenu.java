@@ -230,8 +230,6 @@ public class MainMenu {
 
                                                     updated = Boolean.parseBoolean(get.readLine());
 
-                                                    System.out.println(updated);
-
                                                     if (updated) {
 
                                                         Account.initializeAccounts();
@@ -833,7 +831,7 @@ public class MainMenu {
                                                                             send.flush();
 
                                                                             int subs = Integer.parseInt(get.readLine());
-                                                                            System.out.println(subs);
+
 
                                                                             JTextArea viewSubs = new JTextArea("Quiz Submissions\n\n");
 
@@ -1477,7 +1475,6 @@ public class MainMenu {
                                                     send.flush();
 
                                                     double overallScore = Double.parseDouble(get.readLine());
-                                                    System.out.println(overallScore);
 
                                                     JOptionPane.showMessageDialog(null,
                                                             String.format("Your Overall Score is: %.2f", overallScore),
